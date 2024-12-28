@@ -21,7 +21,9 @@ components/
 ├── dialogs/            # Modal dialog
 ├── layout/             # Sidebar, header
 ├── music/              # Pemutar musik
+├── onboarding/         # Wizard onboarding pengguna baru
 ├── providers/          # React context providers
+├── pwa/                # Komponen PWA install
 └── ui/                 # Komponen shadcn/ui
 
 lib/
@@ -29,6 +31,7 @@ lib/
 ├── api/                # Fungsi service layer
 ├── generated/          # API client auto-generated
 ├── pwa/                # Konfigurasi PWA
+├── storage/            # LocalStorage utilities
 ├── supabase.ts         # Singleton Supabase client
 └── utils.ts            # Fungsi utilitas (cn, generateId, dll.)
 

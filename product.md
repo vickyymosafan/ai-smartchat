@@ -8,9 +8,18 @@ Smartchat AI adalah asisten AI berbasis chat yang dibangun untuk Universitas Muh
 - Riwayat chat tersimpan di Supabase
 - Manajemen sesi untuk kontinuitas pengguna
 - Pemutar musik latar dengan tampilan lirik
-- Dukungan tema gelap/terang
-- Siap PWA dengan service worker
+- Dukungan tema gelap/terang dengan skema warna kustom
+- Input suara dengan speech recognition
+- PWA dengan install prompt cross-platform
+- Onboarding wizard untuk pengguna baru
 - Desain responsif untuk mobile dan desktop
+
+## Fitur PWA
+
+- **Standalone Mode**: Berjalan seperti aplikasi native
+- **Install Prompt**: Deteksi otomatis platform (Chrome/Edge/Safari)
+- **No-Cache Strategy**: Data selalu fresh dari server
+- **iOS Support**: Instruksi manual install untuk Safari iOS
 
 ## Target Pengguna
 

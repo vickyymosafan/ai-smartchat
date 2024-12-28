@@ -17,14 +17,24 @@
 - **Supabase** (PostgreSQL) via `@supabase/supabase-js`
 - **n8n Webhook** untuk pemrosesan AI/RAG
 
+## PWA (Progressive Web App)
+
+- **Service Worker** minimal (no-cache strategy)
+- **Web App Manifest** dengan standalone display mode
+- **beforeinstallprompt** capture untuk install prompt
+- **Cross-platform**: Chrome/Edge (native), Safari iOS (manual instructions)
+- **Onboarding Wizard** untuk pengguna pertama kali
+
 ## Library Utama
 
 - `react-markdown` + `remark-gfm` untuk rendering markdown
 - `next-themes` untuk manajemen tema
 - `@tanstack/react-virtual` untuk virtualized lists
+- `react-speech-recognition` untuk input suara
 - `vaul` untuk komponen drawer
 - `sonner` untuk notifikasi toast
 - `swagger-ui-react` untuk dokumentasi API
+- `@radix-ui/react-visually-hidden` untuk accessibility
 
 ## Generasi API
 

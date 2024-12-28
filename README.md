@@ -8,7 +8,10 @@ Asisten AI berbasis chat untuk Universitas Muhammadiyah Jember yang dibangun den
 - 📝 Dukungan markdown lengkap untuk respons
 - 💾 Riwayat percakapan tersimpan di database
 - 🎵 Musik latar dengan lirik
-- 🌙 Mode gelap dan terang
+- 🌙 Mode gelap dan terang dengan skema warna kustom
+- 🎤 Input suara dengan speech recognition
+- 📲 PWA dengan install prompt cross-platform
+- 🚀 Onboarding wizard untuk pengguna baru
 - 📱 Responsive design untuk semua device
 
 ## 🛠️ Tech Stack
@@ -146,14 +149,18 @@ Untuk membuat aplikasi Android:
 │   ├── chat/              # Chat components
 │   ├── layout/            # Layout components
 │   ├── music/             # Music player
+│   ├── onboarding/        # User onboarding wizard
 │   ├── providers/         # Context providers
+│   ├── pwa/               # PWA install components
 │   └── ui/                # UI components (shadcn)
+├── hooks/                 # Custom React hooks
 ├── lib/
-│   ├── session-helper.ts  # Session management
+│   ├── pwa/               # PWA configuration
+│   ├── storage/           # LocalStorage utilities
 │   ├── supabase.ts        # Supabase client
 │   └── utils.ts           # Utility functions
 ├── public/
-│   └── UMJ.webp           # Logo
+│   └── sw.js              # Service Worker
 └── types/
     └── index.ts           # TypeScript types
 ```
