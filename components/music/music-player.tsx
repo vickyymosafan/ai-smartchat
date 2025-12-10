@@ -1,0 +1,109 @@
+"use client"
+
+import * as React from "react"
+import { useMusic } from "@/components/providers/music-provider"
+import { Button } from "@/components/ui/button"
+import { Slider } from "@/components/ui/slider"
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Music } from "lucide-react"
+
+function formatTime(seconds: number): string {
+  if (isNaN(seconds) || !isFinite(seconds)) return "0:00"
+  const mins = Math.floor(seconds / 60)
+  const secs = Math.floor(seconds % 60)
+  return `${mins}:${secs.toString().padStart(2, "0")}`
+}
+
+export function MusicPlayer() {
+  const {
+    currentTrack,
+    playlist,
+    isPlaying,
+    volume,
+    currentTime,
+    duration,
+    toggle,
+    nextTrack,
+    prevTrack,
+    setVolume,
+    seekTo,
+  } = useMusic()
+
+  const [showVolume, setShowVolume] = React.useState(false)
+  const previousVolume = React.useRef(volume)
+
+  const handleVolumeToggle = () => {
+    if (volume > 0) {
+      previousVolume.current = volume
+      setVolume(0)
+    } else {
+      setVolume(previousVolume.current || 0.5)
+    }
+  }
+
+  return (
+    <div className="p-3 border-t border-sidebar-border">
+      <div className="flex items-center gap-2 mb-2">
+        <Music className="h-4 w-4 text-muted-foreground" />
+        <span className="text-xs font-medium text-muted-foreground">Musik Latar</span>
+      </div>
+
+      {/* Track Info */}
+      <div className="mb-3">
+        <p className="text-sm font-medium truncate text-sidebar-foreground">
+          {currentTrack?.title || "Tidak ada lagu"}
+        </p>
+        <p className="text-xs text-muted-foreground truncate">{currentTrack?.artist || "Pilih lagu untuk diputar"}</p>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="mb-3">
+        <Slider
+          value={[currentTime]}
+          max={duration || 100}
+          step={1}
+          onValueChange={([value]) => seekTo(value)}
+          className="cursor-pointer"
+        />
+        <div className="flex justify-between text-xs text-muted-foreground mt-1">
+          <span>{formatTime(currentTime)}</span>
+          <span>{formatTime(duration)}</span>
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div className="flex items-center justify-center gap-2">
+        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={prevTrack}>
+          <SkipBack className="h-4 w-4" />
+          <span className="sr-only">Sebelumnya</span>
+        </Button>
+
+        <Button variant="default" size="icon" className="h-10 w-10 rounded-full" onClick={toggle}>
+          {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
+          <span className="sr-only">{isPlaying ? "Jeda" : "Putar"}</span>
+        </Button>
+
+        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={nextTrack}>
+          <SkipForward className="h-4 w-4" />
+          <span className="sr-only">Selanjutnya</span>
+        </Button>
+      </div>
+
+      {/* Volume Control */}
+      <div className="flex items-center gap-2 mt-3">
+        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleVolumeToggle}>
+          {volume === 0 ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
+        </Button>
+        <Slider
+          value={[volume * 100]}
+          max={100}
+          step={1}
+          onValueChange={([value]) => setVolume(value / 100)}
+          className="flex-1"
+        />
+      </div>
+
+      {/* Playlist Count */}
+      <p className="text-xs text-muted-foreground text-center mt-2">{playlist.length} lagu dalam playlist</p>
+    </div>
+  )
+}
