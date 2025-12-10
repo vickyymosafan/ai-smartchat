@@ -25,7 +25,7 @@ export function MessageList() {
         {/* Loading indicator */}
         {isLoading && (
           <div className="flex gap-3 px-4 py-4 sm:px-6">
-            <div className="h-8 w-8 shrink-0 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+            <div className="h-8 w-8 shrink-0 rounded-full bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center">
               <Loader2 className="h-4 w-4 text-white animate-spin" />
             </div>
             <div className="flex-1 min-w-0">

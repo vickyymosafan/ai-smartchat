@@ -22,7 +22,7 @@ export function Header({ isSidebarCollapsed, onToggleSidebar, onOpenAbout }: Hea
   const { theme, setTheme } = useTheme()
 
   return (
-    <header className="h-14 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex items-center justify-between px-4">
+    <header className="h-14 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 flex items-center justify-between px-4">
       <div className="flex items-center gap-2">
         {/* Mobile Nav */}
         <div className="md:hidden">

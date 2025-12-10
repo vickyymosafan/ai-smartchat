@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useChat } from "@/components/providers/chat-provider"
-import { Plus, ChevronLeft, Trash2, MoreHorizontal, Info, Pencil, Check, X, MessageSquare } from "lucide-react"
+import { Plus, ChevronLeft, Trash2, Info, Pencil, Check, X, MessageSquare } from "lucide-react"
 import Image from "next/image"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,8 +35,7 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
   const [editTitle, setEditTitle] = React.useState("")
   const inputRef = React.useRef<HTMLInputElement>(null)
 
-  const handleDeleteClick = (chatId: string, e: React.MouseEvent) => {
-    e.stopPropagation()
+  const handleDeleteClick = (chatId: string) => {
     setChatToDelete(chatId)
     setDeleteDialogOpen(true)
   }
@@ -49,8 +48,7 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
     setDeleteDialogOpen(false)
   }
 
-  const handleRenameClick = (chatId: string, currentTitle: string, e: React.MouseEvent) => {
-    e.stopPropagation()
+  const handleRenameClick = (chatId: string, currentTitle: string) => {
     setEditingChatId(chatId)
     setEditTitle(currentTitle)
     setTimeout(() => inputRef.current?.focus(), 0)
@@ -117,76 +115,62 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
                 <p className="text-xs sm:text-sm text-muted-foreground py-4 text-center">Belum ada percakapan</p>
               ) : (
                 chatHistories.map((chat) => (
-                  <div
-                    key={chat.id}
-                    className={cn(
-                      "group flex items-center gap-1.5 sm:gap-2 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer transition-colors",
-                      currentChatId === chat.id
-                        ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                        : "text-sidebar-foreground hover:bg-sidebar-accent/50",
-                    )}
-                    onClick={() => editingChatId !== chat.id && selectChat(chat.id)}
-                  >
-                    <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 opacity-70" />
+                  <ContextMenu key={chat.id}>
+                    <ContextMenuTrigger asChild>
+                      <div
+                        className={cn(
+                          "group flex items-center gap-1.5 sm:gap-2 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer transition-colors",
+                          currentChatId === chat.id
+                            ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                            : "text-sidebar-foreground hover:bg-sidebar-accent/50",
+                        )}
+                        onClick={() => editingChatId !== chat.id && selectChat(chat.id)}
+                      >
+                        <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 opacity-70" />
 
-                    {editingChatId === chat.id ? (
-                      <div className="flex-1 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-                        <Input
-                          ref={inputRef}
-                          value={editTitle}
-                          onChange={(e) => setEditTitle(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") handleRenameSubmit(chat.id)
-                            if (e.key === "Escape") handleRenameCancel()
-                          }}
-                          className="h-5 sm:h-6 text-xs sm:text-sm py-0 px-1"
-                        />
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-4 w-4 sm:h-5 sm:w-5"
-                          onClick={() => handleRenameSubmit(chat.id)}
-                        >
-                          <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-4 w-4 sm:h-5 sm:w-5" onClick={handleRenameCancel}>
-                          <X className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                        </Button>
-                      </div>
-                    ) : (
-                      <>
-                        <span className="flex-1 truncate text-xs sm:text-sm">{chat.title}</span>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
+                        {editingChatId === chat.id ? (
+                          <div className="flex-1 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                            <Input
+                              ref={inputRef}
+                              value={editTitle}
+                              onChange={(e) => setEditTitle(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") handleRenameSubmit(chat.id)
+                                if (e.key === "Escape") handleRenameCancel()
+                              }}
+                              className="h-5 sm:h-6 text-xs sm:text-sm py-0 px-1"
+                            />
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-6 w-6 opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
-                              onClick={(e) => e.stopPropagation()}
+                              className="h-4 w-4 sm:h-5 sm:w-5"
+                              onClick={() => handleRenameSubmit(chat.id)}
                             >
-                              <MoreHorizontal className="h-3 w-3" />
-                              <span className="sr-only">Menu</span>
+                              <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                             </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-40">
-                            <DropdownMenuItem
-                              onClick={(e) => handleRenameClick(chat.id, chat.title, e as unknown as React.MouseEvent)}
-                            >
-                              <Pencil className="h-4 w-4 mr-2" />
-                              Ubah Nama
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="text-destructive focus:text-destructive"
-                              onClick={(e) => handleDeleteClick(chat.id, e as unknown as React.MouseEvent)}
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Hapus
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </>
-                    )}
-                  </div>
+                            <Button variant="ghost" size="icon" className="h-4 w-4 sm:h-5 sm:w-5" onClick={handleRenameCancel}>
+                              <X className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                            </Button>
+                          </div>
+                        ) : (
+                          <span className="flex-1 truncate text-xs sm:text-sm">{chat.title}</span>
+                        )}
+                      </div>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent className="w-40">
+                      <ContextMenuItem onClick={() => handleRenameClick(chat.id, chat.title)}>
+                        <Pencil className="h-4 w-4 mr-2" />
+                        Ubah Nama
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        className="text-destructive focus:text-destructive"
+                        onClick={() => handleDeleteClick(chat.id)}
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Hapus
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
                 ))
               )}
             </div>

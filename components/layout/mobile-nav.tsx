@@ -6,9 +6,9 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useChat } from "@/components/providers/chat-provider"
 import { MusicPlayer } from "@/components/music/music-player"
-import { Menu, Plus, MessageSquare, Trash2, MoreHorizontal, Info } from "lucide-react"
+import { Menu, Plus, MessageSquare, Trash2, Info } from "lucide-react"
 import Image from "next/image"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,8 +31,7 @@ export function MobileNav({ onOpenAbout }: MobileNavProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
   const [chatToDelete, setChatToDelete] = React.useState<string | null>(null)
 
-  const handleDeleteClick = (chatId: string, e: React.MouseEvent) => {
-    e.stopPropagation()
+  const handleDeleteClick = (chatId: string) => {
     setChatToDelete(chatId)
     setDeleteDialogOpen(true)
   }
@@ -98,40 +97,31 @@ export function MobileNav({ onOpenAbout }: MobileNavProps) {
                   <p className="text-xs sm:text-sm text-muted-foreground py-4 text-center">Belum ada percakapan</p>
                 ) : (
                   chatHistories.map((chat) => (
-                    <div
-                      key={chat.id}
-                      className={cn(
-                        "group flex items-center gap-1.5 sm:gap-2 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer transition-colors",
-                        currentChatId === chat.id
-                          ? "bg-accent text-accent-foreground"
-                          : "text-foreground hover:bg-accent/50",
-                      )}
-                      onClick={() => handleSelectChat(chat.id)}
-                    >
-                      <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 opacity-70" />
-                      <span className="flex-1 truncate text-xs sm:text-sm">{chat.title}</span>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6 opacity-70"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <MoreHorizontal className="h-3 w-3" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-40">
-                          <DropdownMenuItem
-                            className="text-destructive focus:text-destructive"
-                            onClick={(e) => handleDeleteClick(chat.id, e as unknown as React.MouseEvent)}
-                          >
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            Hapus
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
+                    <ContextMenu key={chat.id}>
+                      <ContextMenuTrigger asChild>
+                        <div
+                          className={cn(
+                            "group flex items-center gap-1.5 sm:gap-2 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer transition-colors",
+                            currentChatId === chat.id
+                              ? "bg-accent text-accent-foreground"
+                              : "text-foreground hover:bg-accent/50",
+                          )}
+                          onClick={() => handleSelectChat(chat.id)}
+                        >
+                          <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 opacity-70" />
+                          <span className="flex-1 truncate text-xs sm:text-sm">{chat.title}</span>
+                        </div>
+                      </ContextMenuTrigger>
+                      <ContextMenuContent className="w-40">
+                        <ContextMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={() => handleDeleteClick(chat.id)}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Hapus
+                        </ContextMenuItem>
+                      </ContextMenuContent>
+                    </ContextMenu>
                   ))
                 )}
               </div>
