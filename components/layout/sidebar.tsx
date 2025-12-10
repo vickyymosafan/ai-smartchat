@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useChat } from "@/components/providers/chat-provider"
-import { Plus, MessageSquare, ChevronLeft, Trash2, MoreHorizontal, Info, Pencil, Check, X } from "lucide-react"
+import { Plus, ChevronLeft, Trash2, MoreHorizontal, Info, Pencil, Check, X, MessageSquare } from "lucide-react"
+import Image from "next/image"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
   AlertDialog,
@@ -79,9 +80,7 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
         {/* Header */}
         <div className="flex items-center justify-between p-3 border-b border-sidebar-border">
           <div className="flex items-center gap-2 min-w-0">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600">
-              <MessageSquare className="h-4 w-4 text-white" />
-            </div>
+            <Image src="/UMJ.png" alt="Logo" width={32} height={32} className="shrink-0 rounded-lg" />
             <span className="font-semibold text-sidebar-foreground truncate">Smartchat Assist...</span>
           </div>
           <Button

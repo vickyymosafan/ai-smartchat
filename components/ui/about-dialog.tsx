@@ -1,6 +1,6 @@
 "use client"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { MessageSquare } from "lucide-react"
+import Image from "next/image"
 
 interface AboutDialogProps {
   open: boolean
@@ -13,9 +13,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600">
-              <MessageSquare className="h-5 w-5 text-white" />
-            </div>
+            <Image src="/UMJ.png" alt="Logo" width={40} height={40} className="rounded-lg" />
             Smartchat AI Assistant
           </DialogTitle>
           <DialogDescription>

@@ -1,6 +1,6 @@
 "use client"
 
-import { MessageSquare } from "lucide-react"
+import Image from "next/image"
 import { SuggestedQuestions } from "./suggested-questions"
 
 export function WelcomeScreen() {
@@ -9,9 +9,7 @@ export function WelcomeScreen() {
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Logo */}
         <div className="flex justify-center mb-4">
-          <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-            <MessageSquare className="h-8 w-8 text-white" />
-          </div>
+          <Image src="/UMJ.png" alt="Logo" width={64} height={64} className="rounded-2xl shadow-lg" />
         </div>
 
         {/* Title */}

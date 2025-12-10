@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useChat } from "@/components/providers/chat-provider"
 import { MusicPlayer } from "@/components/music/music-player"
 import { Menu, Plus, MessageSquare, Trash2, MoreHorizontal, Info } from "lucide-react"
+import Image from "next/image"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
   AlertDialog,
@@ -66,9 +67,7 @@ export function MobileNav({ onOpenAbout }: MobileNavProps) {
         <SheetContent side="left" className="w-80 p-0 flex flex-col">
           <SheetHeader className="p-4 border-b">
             <SheetTitle className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600">
-                <MessageSquare className="h-4 w-4 text-white" />
-              </div>
+              <Image src="/UMJ.png" alt="Logo" width={32} height={32} className="rounded-lg" />
               Smartchat Assistant
             </SheetTitle>
           </SheetHeader>
