@@ -46,8 +46,8 @@ export function ChatInput() {
   }, [input])
 
   return (
-    <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-4">
+    <div className="border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+      <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-3 sm:p-4">
         <div className="relative flex items-end gap-2">
           <div className="flex-1 relative">
             <Textarea
@@ -55,8 +55,8 @@ export function ChatInput() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Tanyakan sesuatu... (Enter untuk kirim, Shift+Enter untuk baris baru)"
-              className="min-h-[52px] max-h-[200px] resize-none pr-12 py-3 rounded-2xl bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring"
+              placeholder="Tanyakan sesuatu..."
+              className="min-h-[44px] sm:min-h-[52px] max-h-[150px] sm:max-h-[200px] resize-none pr-11 sm:pr-12 py-2.5 sm:py-3 text-sm sm:text-base rounded-2xl bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring"
               disabled={isLoading}
               rows={1}
             />
@@ -64,14 +64,14 @@ export function ChatInput() {
               type="submit"
               size="icon"
               disabled={!input.trim() || isLoading}
-              className="absolute right-2 bottom-2 h-8 w-8 rounded-full"
+              className="absolute right-2 bottom-1.5 sm:bottom-2 h-7 w-7 sm:h-8 sm:w-8 rounded-full"
             >
-              <Send className="h-4 w-4" />
+              <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               <span className="sr-only">Kirim pesan</span>
             </Button>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground text-center mt-2">Smartchat AI Assistant siap membantu Anda</p>
+        <p className="text-[10px] sm:text-xs text-muted-foreground text-center mt-1.5 sm:mt-2">Smartchat AI Assistant siap membantu Anda</p>
       </form>
     </div>
   )

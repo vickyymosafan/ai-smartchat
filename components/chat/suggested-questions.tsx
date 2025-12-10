@@ -21,12 +21,12 @@ export function SuggestedQuestions() {
   const { sendMessage, isLoading } = useChat()
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 max-w-2xl mx-auto">
       {suggestions.map((suggestion, index) => (
         <Button
           key={index}
           variant="outline"
-          className="h-auto p-4 text-left justify-start whitespace-normal text-sm bg-muted/50 hover:bg-muted border-border/50 hover:border-border transition-all"
+          className="h-auto p-3 sm:p-4 text-left justify-start whitespace-normal text-xs sm:text-sm bg-muted/50 hover:bg-muted border-border/50 hover:border-border transition-all"
           onClick={() => sendMessage(suggestion.title)}
           disabled={isLoading}
         >

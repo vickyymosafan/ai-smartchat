@@ -14,25 +14,25 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-        // Headings
+        // Headings - Responsive sizes for mobile
         h1: ({ children }) => (
-          <h1 className="text-2xl font-bold mt-6 mb-4 pb-2 border-b border-border first:mt-0">{children}</h1>
+          <h1 className="text-lg sm:text-xl md:text-2xl font-bold mt-4 sm:mt-6 mb-3 sm:mb-4 pb-2 border-b border-border first:mt-0">{children}</h1>
         ),
         h2: ({ children }) => (
-          <h2 className="text-xl font-semibold mt-5 mb-3 pb-1 border-b border-border/50">{children}</h2>
+          <h2 className="text-base sm:text-lg md:text-xl font-semibold mt-3 sm:mt-5 mb-2 sm:mb-3 pb-1 border-b border-border/50">{children}</h2>
         ),
-        h3: ({ children }) => <h3 className="text-lg font-semibold mt-4 mb-2">{children}</h3>,
-        h4: ({ children }) => <h4 className="text-base font-semibold mt-3 mb-2">{children}</h4>,
-        h5: ({ children }) => <h5 className="text-sm font-semibold mt-2 mb-1">{children}</h5>,
-        h6: ({ children }) => <h6 className="text-sm font-medium mt-2 mb-1 text-muted-foreground">{children}</h6>,
+        h3: ({ children }) => <h3 className="text-sm sm:text-base md:text-lg font-semibold mt-3 sm:mt-4 mb-1.5 sm:mb-2">{children}</h3>,
+        h4: ({ children }) => <h4 className="text-sm sm:text-base font-semibold mt-2 sm:mt-3 mb-1 sm:mb-2">{children}</h4>,
+        h5: ({ children }) => <h5 className="text-xs sm:text-sm font-semibold mt-2 mb-1">{children}</h5>,
+        h6: ({ children }) => <h6 className="text-xs sm:text-sm font-medium mt-2 mb-1 text-muted-foreground">{children}</h6>,
 
-        // Paragraphs
-        p: ({ children }) => <p className="my-3 leading-7 first:mt-0 last:mb-0">{children}</p>,
+        // Paragraphs - Tighter line height on mobile
+        p: ({ children }) => <p className="my-2 sm:my-3 leading-6 sm:leading-7 text-sm sm:text-base first:mt-0 last:mb-0">{children}</p>,
 
-        // Lists
-        ul: ({ children }) => <ul className="my-3 ml-6 list-disc space-y-1">{children}</ul>,
-        ol: ({ children }) => <ol className="my-3 ml-6 list-decimal space-y-1">{children}</ol>,
-        li: ({ children }) => <li className="leading-7">{children}</li>,
+        // Lists - Smaller indent on mobile
+        ul: ({ children }) => <ul className="my-2 sm:my-3 ml-4 sm:ml-6 list-disc space-y-0.5 sm:space-y-1">{children}</ul>,
+        ol: ({ children }) => <ol className="my-2 sm:my-3 ml-4 sm:ml-6 list-decimal space-y-0.5 sm:space-y-1">{children}</ol>,
+        li: ({ children }) => <li className="leading-6 sm:leading-7 text-sm sm:text-base">{children}</li>,
 
         // Blockquote
         blockquote: ({ children }) => (
@@ -41,24 +41,24 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
           </blockquote>
         ),
 
-        // Code
+        // Code - Responsive padding
         code: ({ className, children, ...props }) => {
           const isInline = !className
           if (isInline) {
             return (
-              <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm" {...props}>
+              <code className="relative rounded bg-muted px-1 sm:px-[0.3rem] py-[0.1rem] sm:py-[0.2rem] font-mono text-xs sm:text-sm" {...props}>
                 {children}
               </code>
             )
           }
           const language = className?.replace("language-", "") || "text"
           return (
-            <div className="my-4 overflow-hidden rounded-lg border bg-muted/50">
-              <div className="flex items-center justify-between bg-muted px-4 py-2 text-xs text-muted-foreground">
+            <div className="my-3 sm:my-4 overflow-hidden rounded-lg border bg-muted/50">
+              <div className="flex items-center justify-between bg-muted px-3 sm:px-4 py-1.5 sm:py-2 text-xs text-muted-foreground">
                 <span>{language}</span>
               </div>
-              <pre className="overflow-x-auto p-4">
-                <code className={cn("font-mono text-sm", className)} {...props}>
+              <pre className="overflow-x-auto p-3 sm:p-4">
+                <code className={cn("font-mono text-xs sm:text-sm", className)} {...props}>
                   {children}
                 </code>
               </pre>
@@ -67,17 +67,17 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
         },
         pre: ({ children }) => <>{children}</>,
 
-        // Table
+        // Table - Responsive padding
         table: ({ children }) => (
-          <div className="my-4 overflow-x-auto rounded-lg border">
-            <table className="w-full border-collapse text-sm">{children}</table>
+          <div className="my-3 sm:my-4 overflow-x-auto rounded-lg border">
+            <table className="w-full border-collapse text-xs sm:text-sm">{children}</table>
           </div>
         ),
         thead: ({ children }) => <thead className="bg-muted/50">{children}</thead>,
         tbody: ({ children }) => <tbody className="divide-y divide-border">{children}</tbody>,
         tr: ({ children }) => <tr className="border-b border-border last:border-0">{children}</tr>,
-        th: ({ children }) => <th className="px-4 py-3 text-left font-semibold">{children}</th>,
-        td: ({ children }) => <td className="px-4 py-3">{children}</td>,
+        th: ({ children }) => <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold">{children}</th>,
+        td: ({ children }) => <td className="px-2 sm:px-4 py-2 sm:py-3">{children}</td>,
 
         // Links
         a: ({ href, children }) => (
