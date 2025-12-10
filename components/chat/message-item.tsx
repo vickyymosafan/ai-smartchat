@@ -30,7 +30,7 @@ export const MessageItem = React.memo(function MessageItem({ message }: MessageI
       <div className={cn("flex-1 min-w-0 max-w-[85%] sm:max-w-[75%]", isUser ? "flex flex-col items-end" : "")}>
         {isUser ? (
           <div className="rounded-2xl rounded-tr-sm bg-primary text-primary-foreground px-4 py-2.5">
-            <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
+            <p className="text-sm whitespace-pre-wrap wrap-break-word">{message.content}</p>
           </div>
         ) : (
           <div className="rounded-2xl rounded-tl-sm bg-muted px-4 py-3">
