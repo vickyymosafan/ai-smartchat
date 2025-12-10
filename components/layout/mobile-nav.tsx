@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useChat } from "@/components/providers/chat-provider"
 import { MusicPlayer } from "@/components/music/music-player"
@@ -70,6 +70,9 @@ export function MobileNav({ onOpenAbout }: MobileNavProps) {
               <Image src="/UMJ.png" alt="Logo" width={32} height={32} className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg" />
               Smartchat Assistant
             </SheetTitle>
+            <SheetDescription className="sr-only">
+              Menu navigasi untuk mengakses riwayat percakapan dan fitur lainnya
+            </SheetDescription>
           </SheetHeader>
 
           {/* New Chat Button */}
