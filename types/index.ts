@@ -42,6 +42,7 @@ export interface BackgroundMusic {
   title: string
   artist: string
   url: string
+  lyrics?: string
   isActive: boolean
   order: number
   createdAt: string
