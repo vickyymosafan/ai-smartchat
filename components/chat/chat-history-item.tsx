@@ -1,44 +1,95 @@
 "use client"
 
+/**
+ * ChatHistoryItem Component (Refactored with SOLID Principles)
+ * 
+ * ISP: Uses segregated prop interfaces
+ * OCP: Extensible via icon, actions, and renderContent props
+ * SRP: Only handles item rendering, edit state comes from parent
+ */
+
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
 import { Trash2, Pencil, Check, X, MessageSquare } from "lucide-react"
-import type { ChatHistory } from "@/types"
+import type { ChatHistoryItemProps, ChatItemAction } from "@/types/segregated-props"
 
-interface ChatHistoryItemProps {
-  chat: ChatHistory
-  isActive: boolean
-  isEditing: boolean
-  editTitle: string
-  onEditTitleChange: (title: string) => void
-  onSelect: () => void
-  onRenameClick: () => void
-  onRenameSubmit: () => void
-  onRenameCancel: () => void
-  onDeleteClick: () => void
-  inputRef?: React.RefObject<HTMLInputElement | null>
+// ============================================
+// Default Actions (OCP - can be overridden)
+// ============================================
+
+const createDefaultActions = (
+  onRenameClick?: () => void,
+  onDeleteClick?: () => void
+): ChatItemAction[] => {
+  const actions: ChatItemAction[] = []
+  
+  if (onRenameClick) {
+    actions.push({
+      label: "Ubah Nama",
+      icon: <Pencil className="h-4 w-4 mr-2" />,
+      onClick: onRenameClick,
+    })
+  }
+  
+  if (onDeleteClick) {
+    actions.push({
+      label: "Hapus",
+      icon: <Trash2 className="h-4 w-4 mr-2" />,
+      onClick: onDeleteClick,
+      variant: "destructive",
+    })
+  }
+  
+  return actions
 }
 
+// ============================================
+// Component Implementation
+// ============================================
+
 export function ChatHistoryItem({
+  // Display props (required)
   chat,
   isActive,
-  isEditing,
-  editTitle,
-  onEditTitleChange,
   onSelect,
+  className,
+  
+  // Edit props (optional)
+  isEditing = false,
+  editTitle = "",
+  onEditTitleChange,
   onRenameClick,
   onRenameSubmit,
   onRenameCancel,
-  onDeleteClick,
   inputRef,
+  
+  // Action props (optional)
+  onDeleteClick,
+  
+  // Extension props (OCP)
+  icon,
+  actions,
+  renderContent,
 }: ChatHistoryItemProps) {
+  // Keyboard handler for edit mode
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") onRenameSubmit()
-    if (e.key === "Escape") onRenameCancel()
+    if (e.key === "Enter" && onRenameSubmit) onRenameSubmit()
+    if (e.key === "Escape" && onRenameCancel) onRenameCancel()
   }
+
+  // Resolve icon (OCP - customizable)
+  const itemIcon = icon ?? <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 opacity-70" />
+
+  // Resolve actions (OCP - customizable)
+  const menuActions = actions ?? createDefaultActions(onRenameClick, onDeleteClick)
+
+  // Render content (OCP - customizable)
+  const content = renderContent ? renderContent(chat) : (
+    <span className="flex-1 truncate text-xs sm:text-sm">{chat.title}</span>
+  )
 
   return (
     <ContextMenu>
@@ -49,17 +100,18 @@ export function ChatHistoryItem({
             isActive
               ? "bg-sidebar-accent text-sidebar-accent-foreground"
               : "text-sidebar-foreground hover:bg-sidebar-accent/50",
+            className
           )}
           onClick={() => !isEditing && onSelect()}
         >
-          <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 opacity-70" />
+          {itemIcon}
 
           {isEditing ? (
             <div className="flex-1 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
               <Input
                 ref={inputRef}
                 value={editTitle}
-                onChange={(e) => onEditTitleChange(e.target.value)}
+                onChange={(e) => onEditTitleChange?.(e.target.value)}
                 onKeyDown={handleKeyDown}
                 className="h-5 sm:h-6 text-xs sm:text-sm py-0 px-1"
               />
@@ -71,54 +123,69 @@ export function ChatHistoryItem({
               >
                 <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-4 w-4 sm:h-5 sm:w-5" onClick={onRenameCancel}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-4 w-4 sm:h-5 sm:w-5" 
+                onClick={onRenameCancel}
+              >
                 <X className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
               </Button>
             </div>
           ) : (
             <>
-              <span className="flex-1 truncate text-xs sm:text-sm">{chat.title}</span>
+              {content}
+              
               {/* Action buttons - visible on mobile, shown on hover for desktop */}
-              <div
-                className="flex items-center gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 sm:h-7 sm:w-7 text-muted-foreground hover:text-foreground"
-                  onClick={onRenameClick}
+              {(onRenameClick || onDeleteClick) && (
+                <div
+                  className="flex items-center gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <Pencil className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                  <span className="sr-only">Ubah nama</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 sm:h-7 sm:w-7 text-muted-foreground hover:text-destructive"
-                  onClick={onDeleteClick}
-                >
-                  <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                  <span className="sr-only">Hapus</span>
-                </Button>
-              </div>
+                  {onRenameClick && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 sm:h-7 sm:w-7 text-muted-foreground hover:text-foreground"
+                      onClick={onRenameClick}
+                    >
+                      <Pencil className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                      <span className="sr-only">Ubah nama</span>
+                    </Button>
+                  )}
+                  {onDeleteClick && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 sm:h-7 sm:w-7 text-muted-foreground hover:text-destructive"
+                      onClick={onDeleteClick}
+                    >
+                      <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                      <span className="sr-only">Hapus</span>
+                    </Button>
+                  )}
+                </div>
+              )}
             </>
           )}
         </div>
       </ContextMenuTrigger>
-      <ContextMenuContent className="w-40">
-        <ContextMenuItem onClick={onRenameClick}>
-          <Pencil className="h-4 w-4 mr-2" />
-          Ubah Nama
-        </ContextMenuItem>
-        <ContextMenuItem
-          className="text-destructive focus:text-destructive"
-          onClick={onDeleteClick}
-        >
-          <Trash2 className="h-4 w-4 mr-2" />
-          Hapus
-        </ContextMenuItem>
-      </ContextMenuContent>
+      
+      {/* Context Menu - uses actions array (OCP) */}
+      {menuActions.length > 0 && (
+        <ContextMenuContent className="w-40">
+          {menuActions.map((action, index) => (
+            <ContextMenuItem
+              key={index}
+              className={action.variant === "destructive" ? "text-destructive focus:text-destructive" : ""}
+              onClick={action.onClick}
+            >
+              {action.icon}
+              {action.label}
+            </ContextMenuItem>
+          ))}
+        </ContextMenuContent>
+      )}
     </ContextMenu>
   )
 }

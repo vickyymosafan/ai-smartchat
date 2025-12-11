@@ -1,5 +1,13 @@
 "use client"
 
+/**
+ * Sidebar Component (Refactored with SOLID Principles)
+ * 
+ * SRP: Uses hooks for edit and dialog state management
+ * DIP: Depends on useChat abstraction, not implementation
+ * OCP: Can be extended via slots (header, footer, etc.)
+ */
+
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -11,54 +19,55 @@ import { MusicPlayer } from "@/components/music/music-player"
 import { ChatHistoryItem } from "@/components/chat/chat-history-item"
 import { ConfirmDeleteDialog } from "@/components/dialogs/confirm-delete-dialog"
 
+// Import hooks (SRP)
+import { useEditableItem } from "@/hooks/useEditableItem"
+import { useConfirmDialog } from "@/hooks/useConfirmDialog"
+
+// ============================================
+// Props Interface (OCP - Slot-based Extension)
+// ============================================
+
 interface SidebarProps {
   isCollapsed: boolean
   onToggle: () => void
   onOpenAbout: () => void
+  
+  // Extension slots (OCP)
+  headerSlot?: React.ReactNode
+  footerSlot?: React.ReactNode
+  beforeHistorySlot?: React.ReactNode
+  afterHistorySlot?: React.ReactNode
 }
 
-export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
+// ============================================
+// Component Implementation
+// ============================================
+
+export function Sidebar({
+  isCollapsed,
+  onToggle,
+  onOpenAbout,
+  headerSlot,
+  footerSlot,
+  beforeHistorySlot,
+  afterHistorySlot,
+}: SidebarProps) {
+  // DIP: Depend on abstraction (useChat hook)
   const { chatHistories, currentChatId, createNewChat, selectChat, deleteChat, renameChat } = useChat()
-  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
-  const [chatToDelete, setChatToDelete] = React.useState<string | null>(null)
-  const [editingChatId, setEditingChatId] = React.useState<string | null>(null)
-  const [editTitle, setEditTitle] = React.useState("")
-  const inputRef = React.useRef<HTMLInputElement | null>(null)
 
-  const handleDeleteClick = (chatId: string) => {
-    setChatToDelete(chatId)
-    // Delay AlertDialog opening to let ContextMenu fully close first
-    setTimeout(() => {
-      setDeleteDialogOpen(true)
-    }, 100)
-  }
+  // SRP: Edit state managed by hook
+  const editState = useEditableItem<string>({
+    onSubmit: async (chatId, newTitle) => {
+      await renameChat(chatId, newTitle)
+    },
+  })
 
-  const confirmDelete = async () => {
-    if (chatToDelete) {
-      await deleteChat(chatToDelete)
-      setChatToDelete(null)
-    }
-    setDeleteDialogOpen(false)
-  }
-
-  const handleRenameClick = (chatId: string, currentTitle: string) => {
-    setEditingChatId(chatId)
-    setEditTitle(currentTitle)
-    setTimeout(() => inputRef.current?.focus(), 0)
-  }
-
-  const handleRenameSubmit = async (chatId: string) => {
-    if (editTitle.trim()) {
-      await renameChat(chatId, editTitle.trim())
-    }
-    setEditingChatId(null)
-    setEditTitle("")
-  }
-
-  const handleRenameCancel = () => {
-    setEditingChatId(null)
-    setEditTitle("")
-  }
+  // SRP: Delete dialog state managed by hook
+  const deleteDialog = useConfirmDialog<string>({
+    onConfirm: async (chatId) => {
+      await deleteChat(chatId)
+    },
+  })
 
   return (
     <>
@@ -85,6 +94,9 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
           </Button>
         </div>
 
+        {/* Header Slot (OCP) */}
+        {headerSlot}
+
         {/* New Chat Button */}
         <div className="p-2 sm:p-3">
           <Button
@@ -96,6 +108,9 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
             Percakapan Baru
           </Button>
         </div>
+
+        {/* Before History Slot (OCP) */}
+        {beforeHistorySlot}
 
         {/* Chat History */}
         <div className="flex-1 overflow-hidden flex flex-col min-h-0">
@@ -112,15 +127,19 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
                     key={chat.id}
                     chat={chat}
                     isActive={currentChatId === chat.id}
-                    isEditing={editingChatId === chat.id}
-                    editTitle={editTitle}
-                    onEditTitleChange={setEditTitle}
                     onSelect={() => selectChat(chat.id)}
-                    onRenameClick={() => handleRenameClick(chat.id, chat.title)}
-                    onRenameSubmit={() => handleRenameSubmit(chat.id)}
-                    onRenameCancel={handleRenameCancel}
-                    onDeleteClick={() => handleDeleteClick(chat.id)}
-                    inputRef={inputRef}
+                    
+                    // Edit props (from hook - SRP)
+                    isEditing={editState.isEditing(chat.id)}
+                    editTitle={editState.editValue}
+                    onEditTitleChange={editState.updateValue}
+                    onRenameClick={() => editState.startEdit(chat.id, chat.title)}
+                    onRenameSubmit={editState.submitEdit}
+                    onRenameCancel={editState.cancelEdit}
+                    inputRef={editState.inputRef}
+                    
+                    // Delete action (from hook - SRP)
+                    onDeleteClick={() => deleteDialog.openDialog(chat.id)}
                   />
                 ))
               )}
@@ -128,8 +147,14 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
           </ScrollArea>
         </div>
 
+        {/* After History Slot (OCP) */}
+        {afterHistorySlot}
+
         {/* Music Player */}
         <MusicPlayer />
+
+        {/* Footer Slot (OCP) */}
+        {footerSlot}
 
         {/* About Button */}
         <div className="p-2 sm:p-3 border-t border-sidebar-border">
@@ -146,9 +171,9 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
 
       {/* Delete Confirmation Dialog */}
       <ConfirmDeleteDialog
-        open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
-        onConfirm={confirmDelete}
+        open={deleteDialog.isOpen}
+        onOpenChange={(open) => !open && deleteDialog.closeDialog()}
+        onConfirm={deleteDialog.confirm}
         title="Hapus Percakapan?"
         description="Tindakan ini tidak dapat dibatalkan. Percakapan ini akan dihapus secara permanen."
       />
