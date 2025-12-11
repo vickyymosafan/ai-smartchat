@@ -84,20 +84,21 @@ export const MessageItem = React.memo(function MessageItem({
       )
 
   return (
-    <div 
-      className={cn(
-        "flex gap-2 sm:gap-3 px-3 py-2.5 sm:px-4 sm:py-3 md:px-6 md:py-4", 
-        isUser ? "flex-row-reverse" : "flex-row",
-        className
-      )}
-    >
-      {avatar}
+    <div className={cn("w-full py-2.5 sm:py-3 md:py-4", className)}>
+      <div 
+        className={cn(
+          "max-w-4xl mx-auto flex gap-2 sm:gap-3 px-3 sm:px-4",
+          isUser ? "flex-row-reverse" : "flex-row"
+        )}
+      >
+        {avatar}
 
-      <div className={cn(
-        "flex-1 min-w-0 max-w-[90%] sm:max-w-[85%] md:max-w-[75%]", 
-        isUser ? "flex flex-col items-end" : ""
-      )}>
-        {content}
+        <div className={cn(
+          "flex-1 min-w-0 max-w-[90%] sm:max-w-[85%] md:max-w-[75%]", 
+          isUser ? "flex flex-col items-end" : ""
+        )}>
+          {content}
+        </div>
       </div>
     </div>
   )
