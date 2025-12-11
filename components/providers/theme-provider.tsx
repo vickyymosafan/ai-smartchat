@@ -3,16 +3,21 @@
 import * as React from "react"
 
 type Theme = "dark" | "light" | "system"
+type ColorScheme = "default" | "ungu"
 
 interface ThemeProviderProps {
   children: React.ReactNode
   defaultTheme?: Theme
+  defaultColorScheme?: ColorScheme
   storageKey?: string
+  colorSchemeStorageKey?: string
 }
 
 interface ThemeProviderState {
   theme: Theme
   setTheme: (theme: Theme) => void
+  colorScheme: ColorScheme
+  setColorScheme: (scheme: ColorScheme) => void
 }
 
 const ThemeProviderContext = React.createContext<ThemeProviderState | undefined>(undefined)
@@ -20,18 +25,31 @@ const ThemeProviderContext = React.createContext<ThemeProviderState | undefined>
 export function ThemeProvider({
   children,
   defaultTheme = "system",
+  defaultColorScheme = "default",
   storageKey = "smartchat-theme",
+  colorSchemeStorageKey = "smartchat-color-scheme",
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = React.useState<Theme>(defaultTheme)
+  const [colorScheme, setColorScheme] = React.useState<ColorScheme>(defaultColorScheme)
 
+  // Load theme from localStorage
   React.useEffect(() => {
-    const stored = localStorage.getItem(storageKey) as Theme | null
-    if (stored) {
-      setTheme(stored)
+    const storedTheme = localStorage.getItem(storageKey) as Theme | null
+    if (storedTheme) {
+      setTheme(storedTheme)
     }
   }, [storageKey])
 
+  // Load color scheme from localStorage
+  React.useEffect(() => {
+    const storedScheme = localStorage.getItem(colorSchemeStorageKey) as ColorScheme | null
+    if (storedScheme) {
+      setColorScheme(storedScheme)
+    }
+  }, [colorSchemeStorageKey])
+
+  // Apply theme class (dark/light)
   React.useEffect(() => {
     const root = window.document.documentElement
     root.classList.remove("light", "dark")
@@ -44,6 +62,12 @@ export function ThemeProvider({
     }
   }, [theme])
 
+  // Apply color scheme attribute
+  React.useEffect(() => {
+    const root = window.document.documentElement
+    root.setAttribute("data-color-scheme", colorScheme)
+  }, [colorScheme])
+
   const value = React.useMemo(
     () => ({
       theme,
@@ -51,8 +75,13 @@ export function ThemeProvider({
         localStorage.setItem(storageKey, newTheme)
         setTheme(newTheme)
       },
+      colorScheme,
+      setColorScheme: (newScheme: ColorScheme) => {
+        localStorage.setItem(colorSchemeStorageKey, newScheme)
+        setColorScheme(newScheme)
+      },
     }),
-    [theme, storageKey],
+    [theme, storageKey, colorScheme, colorSchemeStorageKey],
   )
 
   return (

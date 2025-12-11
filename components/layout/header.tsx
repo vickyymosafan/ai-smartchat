@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { MobileNav } from "./mobile-nav"
 import { useTheme } from "@/components/providers/theme-provider"
-import { Menu, Sun, Moon, Settings } from "lucide-react"
+import { Menu, Sun, Moon, Settings, Palette } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +19,7 @@ interface HeaderProps {
 }
 
 export function Header({ isSidebarCollapsed, onToggleSidebar, onOpenAbout }: HeaderProps) {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, colorScheme, setColorScheme } = useTheme()
 
   return (
     <header className="h-14 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 flex items-center justify-between px-4">
@@ -50,6 +50,7 @@ export function Header({ isSidebarCollapsed, onToggleSidebar, onOpenAbout }: Hea
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
+            {/* Display Mode Section */}
             <DropdownMenuLabel>Tampilan</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setTheme("light")}>
@@ -66,6 +67,21 @@ export function Header({ isSidebarCollapsed, onToggleSidebar, onOpenAbout }: Hea
               <Settings className="h-4 w-4 mr-2" />
               Sistem
               {theme === "system" && <span className="ml-auto text-xs">✓</span>}
+            </DropdownMenuItem>
+
+            {/* Color Scheme Section */}
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>Skema Warna</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setColorScheme("default")}>
+              <Palette className="h-4 w-4 mr-2 text-cyan-500" />
+              Default
+              {colorScheme === "default" && <span className="ml-auto text-xs">✓</span>}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setColorScheme("ungu")}>
+              <Palette className="h-4 w-4 mr-2 text-purple-500" />
+              Ungu
+              {colorScheme === "ungu" && <span className="ml-auto text-xs">✓</span>}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
