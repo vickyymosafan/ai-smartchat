@@ -3,7 +3,7 @@
 import * as React from "react"
 
 type Theme = "dark" | "light" | "system"
-type ColorScheme = "default" | "ungu"
+type ColorScheme = "default" | "ungu" | "netral"
 
 interface ThemeProviderProps {
   children: React.ReactNode

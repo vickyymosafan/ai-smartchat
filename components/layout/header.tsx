@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { MobileNav } from "./mobile-nav"
 import { useTheme } from "@/components/providers/theme-provider"
-import { Menu, Sun, Moon, Settings, Palette } from "lucide-react"
+import { Menu, Sun, Moon, Settings, Palette, Circle } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -82,6 +82,11 @@ export function Header({ isSidebarCollapsed, onToggleSidebar, onOpenAbout }: Hea
               <Palette className="h-4 w-4 mr-2 text-purple-500" />
               Ungu
               {colorScheme === "ungu" && <span className="ml-auto text-xs">✓</span>}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setColorScheme("netral")}>
+              <Circle className="h-4 w-4 mr-2 text-gray-500" />
+              Netral
+              {colorScheme === "netral" && <span className="ml-auto text-xs">✓</span>}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
