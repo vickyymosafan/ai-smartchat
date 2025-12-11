@@ -123,7 +123,7 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
                     <ContextMenuTrigger asChild>
                       <div
                         className={cn(
-                          "group flex items-center gap-1.5 sm:gap-2 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer transition-colors",
+                          "group flex items-center gap-1.5 sm:gap-2 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer transition-colors no-select-touch",
                           currentChatId === chat.id
                             ? "bg-sidebar-accent text-sidebar-accent-foreground"
                             : "text-sidebar-foreground hover:bg-sidebar-accent/50",
@@ -157,7 +157,33 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
                             </Button>
                           </div>
                         ) : (
-                          <span className="flex-1 truncate text-xs sm:text-sm">{chat.title}</span>
+                          <>
+                            <span className="flex-1 truncate text-xs sm:text-sm">{chat.title}</span>
+                            {/* Action buttons - visible on mobile, shown on hover for desktop */}
+                            <div 
+                              className="flex items-center gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6 sm:h-7 sm:w-7 text-muted-foreground hover:text-foreground"
+                                onClick={() => handleRenameClick(chat.id, chat.title)}
+                              >
+                                <Pencil className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                                <span className="sr-only">Ubah nama</span>
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6 sm:h-7 sm:w-7 text-muted-foreground hover:text-destructive"
+                                onClick={() => handleDeleteClick(chat.id)}
+                              >
+                                <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                                <span className="sr-only">Hapus</span>
+                              </Button>
+                            </div>
+                          </>
                         )}
                       </div>
                     </ContextMenuTrigger>
