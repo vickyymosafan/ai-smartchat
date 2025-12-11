@@ -2,6 +2,8 @@ import { type NextRequest, NextResponse } from "next/server"
 import { getSupabaseServerClient } from "@/lib/supabase"
 import { getSessionUUID } from "@/lib/session-helper"
 import { getCachedResponse, saveCachedResponse } from "@/lib/cache-helper"
+import { extractAIResponse } from "@/lib/ai-response-parser"
+import { generateId, nowISO } from "@/lib/utils"
 
 const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL
 
@@ -111,42 +113,15 @@ export async function POST(request: NextRequest) {
 
     const rawResponse = await response.text()
 
-    let data: any
+    let data: unknown
     try {
       data = JSON.parse(rawResponse)
     } catch {
       data = { output: rawResponse }
     }
 
-    // Extract the actual response from various possible structures
-    let aiResponse: string
-
-    if (typeof data === "string") {
-      aiResponse = data
-    } else if (Array.isArray(data) && data.length > 0) {
-      const firstItem = data[0]
-      aiResponse =
-        firstItem?.output || firstItem?.response || firstItem?.text || firstItem?.message || JSON.stringify(firstItem)
-    } else if (data.output) {
-      aiResponse = data.output
-    } else if (data.response) {
-      aiResponse = data.response
-    } else if (data.text) {
-      aiResponse = data.text
-    } else if (data.message) {
-      aiResponse = data.message
-    } else if (data.result) {
-      aiResponse = data.result
-    } else if (data.answer) {
-      aiResponse = data.answer
-    } else if (data.content) {
-      aiResponse = data.content
-    } else if (data.data) {
-      const nested = data.data
-      aiResponse = nested?.output || nested?.response || nested?.text || nested?.message || JSON.stringify(nested)
-    } else {
-      aiResponse = JSON.stringify(data)
-    }
+    // Extract the actual response using simplified parser
+    const aiResponse = extractAIResponse(data)
 
     // ========== SAVE TO CACHE ==========
     // Save the new response to cache for future use

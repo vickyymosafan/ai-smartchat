@@ -3,23 +3,13 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useChat } from "@/components/providers/chat-provider"
-import { Plus, ChevronLeft, Trash2, Info, Pencil, Check, X, MessageSquare } from "lucide-react"
+import { Plus, ChevronLeft, Info } from "lucide-react"
 import Image from "next/image"
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import { MusicPlayer } from "@/components/music/music-player"
+import { ChatHistoryItem } from "@/components/chat/chat-history-item"
+import { ConfirmDeleteDialog } from "@/components/dialogs/confirm-delete-dialog"
 
 interface SidebarProps {
   isCollapsed: boolean
@@ -33,12 +23,11 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
   const [chatToDelete, setChatToDelete] = React.useState<string | null>(null)
   const [editingChatId, setEditingChatId] = React.useState<string | null>(null)
   const [editTitle, setEditTitle] = React.useState("")
-  const inputRef = React.useRef<HTMLInputElement>(null)
+  const inputRef = React.useRef<HTMLInputElement | null>(null)
 
   const handleDeleteClick = (chatId: string) => {
     setChatToDelete(chatId)
     // Delay AlertDialog opening to let ContextMenu fully close first
-    // This prevents focus management conflicts between Radix components
     setTimeout(() => {
       setDeleteDialogOpen(true)
     }, 100)
@@ -119,88 +108,20 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
                 <p className="text-xs sm:text-sm text-muted-foreground py-4 text-center">Belum ada percakapan</p>
               ) : (
                 chatHistories.map((chat) => (
-                  <ContextMenu key={chat.id}>
-                    <ContextMenuTrigger asChild>
-                      <div
-                        className={cn(
-                          "group flex items-center gap-1.5 sm:gap-2 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer transition-colors no-select-touch",
-                          currentChatId === chat.id
-                            ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                            : "text-sidebar-foreground hover:bg-sidebar-accent/50",
-                        )}
-                        onClick={() => editingChatId !== chat.id && selectChat(chat.id)}
-                      >
-                        <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 opacity-70" />
-
-                        {editingChatId === chat.id ? (
-                          <div className="flex-1 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-                            <Input
-                              ref={inputRef}
-                              value={editTitle}
-                              onChange={(e) => setEditTitle(e.target.value)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter") handleRenameSubmit(chat.id)
-                                if (e.key === "Escape") handleRenameCancel()
-                              }}
-                              className="h-5 sm:h-6 text-xs sm:text-sm py-0 px-1"
-                            />
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-4 w-4 sm:h-5 sm:w-5"
-                              onClick={() => handleRenameSubmit(chat.id)}
-                            >
-                              <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                            </Button>
-                            <Button variant="ghost" size="icon" className="h-4 w-4 sm:h-5 sm:w-5" onClick={handleRenameCancel}>
-                              <X className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                            </Button>
-                          </div>
-                        ) : (
-                          <>
-                            <span className="flex-1 truncate text-xs sm:text-sm">{chat.title}</span>
-                            {/* Action buttons - visible on mobile, shown on hover for desktop */}
-                            <div 
-                              className="flex items-center gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6 sm:h-7 sm:w-7 text-muted-foreground hover:text-foreground"
-                                onClick={() => handleRenameClick(chat.id, chat.title)}
-                              >
-                                <Pencil className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                                <span className="sr-only">Ubah nama</span>
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6 sm:h-7 sm:w-7 text-muted-foreground hover:text-destructive"
-                                onClick={() => handleDeleteClick(chat.id)}
-                              >
-                                <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                                <span className="sr-only">Hapus</span>
-                              </Button>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </ContextMenuTrigger>
-                    <ContextMenuContent className="w-40">
-                      <ContextMenuItem onClick={() => handleRenameClick(chat.id, chat.title)}>
-                        <Pencil className="h-4 w-4 mr-2" />
-                        Ubah Nama
-                      </ContextMenuItem>
-                      <ContextMenuItem
-                        className="text-destructive focus:text-destructive"
-                        onClick={() => handleDeleteClick(chat.id)}
-                      >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Hapus
-                      </ContextMenuItem>
-                    </ContextMenuContent>
-                  </ContextMenu>
+                  <ChatHistoryItem
+                    key={chat.id}
+                    chat={chat}
+                    isActive={currentChatId === chat.id}
+                    isEditing={editingChatId === chat.id}
+                    editTitle={editTitle}
+                    onEditTitleChange={setEditTitle}
+                    onSelect={() => selectChat(chat.id)}
+                    onRenameClick={() => handleRenameClick(chat.id, chat.title)}
+                    onRenameSubmit={() => handleRenameSubmit(chat.id)}
+                    onRenameCancel={handleRenameCancel}
+                    onDeleteClick={() => handleDeleteClick(chat.id)}
+                    inputRef={inputRef}
+                  />
                 ))
               )}
             </div>
@@ -224,25 +145,13 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
       </aside>
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent onCloseAutoFocus={(e) => e.preventDefault()}>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Hapus Percakapan?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tindakan ini tidak dapat dibatalkan. Percakapan ini akan dihapus secara permanen.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Batal</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Hapus
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmDeleteDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={confirmDelete}
+        title="Hapus Percakapan?"
+        description="Tindakan ini tidak dapat dibatalkan. Percakapan ini akan dihapus secara permanen."
+      />
     </>
   )
 }

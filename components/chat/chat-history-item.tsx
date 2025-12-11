@@ -1,0 +1,124 @@
+"use client"
+
+import * as React from "react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
+import { Trash2, Pencil, Check, X, MessageSquare } from "lucide-react"
+import type { ChatHistory } from "@/types"
+
+interface ChatHistoryItemProps {
+  chat: ChatHistory
+  isActive: boolean
+  isEditing: boolean
+  editTitle: string
+  onEditTitleChange: (title: string) => void
+  onSelect: () => void
+  onRenameClick: () => void
+  onRenameSubmit: () => void
+  onRenameCancel: () => void
+  onDeleteClick: () => void
+  inputRef?: React.RefObject<HTMLInputElement | null>
+}
+
+export function ChatHistoryItem({
+  chat,
+  isActive,
+  isEditing,
+  editTitle,
+  onEditTitleChange,
+  onSelect,
+  onRenameClick,
+  onRenameSubmit,
+  onRenameCancel,
+  onDeleteClick,
+  inputRef,
+}: ChatHistoryItemProps) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") onRenameSubmit()
+    if (e.key === "Escape") onRenameCancel()
+  }
+
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger asChild>
+        <div
+          className={cn(
+            "group flex items-center gap-1.5 sm:gap-2 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer transition-colors no-select-touch",
+            isActive
+              ? "bg-sidebar-accent text-sidebar-accent-foreground"
+              : "text-sidebar-foreground hover:bg-sidebar-accent/50",
+          )}
+          onClick={() => !isEditing && onSelect()}
+        >
+          <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 opacity-70" />
+
+          {isEditing ? (
+            <div className="flex-1 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+              <Input
+                ref={inputRef}
+                value={editTitle}
+                onChange={(e) => onEditTitleChange(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="h-5 sm:h-6 text-xs sm:text-sm py-0 px-1"
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-4 w-4 sm:h-5 sm:w-5"
+                onClick={onRenameSubmit}
+              >
+                <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+              </Button>
+              <Button variant="ghost" size="icon" className="h-4 w-4 sm:h-5 sm:w-5" onClick={onRenameCancel}>
+                <X className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+              </Button>
+            </div>
+          ) : (
+            <>
+              <span className="flex-1 truncate text-xs sm:text-sm">{chat.title}</span>
+              {/* Action buttons - visible on mobile, shown on hover for desktop */}
+              <div
+                className="flex items-center gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6 sm:h-7 sm:w-7 text-muted-foreground hover:text-foreground"
+                  onClick={onRenameClick}
+                >
+                  <Pencil className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                  <span className="sr-only">Ubah nama</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6 sm:h-7 sm:w-7 text-muted-foreground hover:text-destructive"
+                  onClick={onDeleteClick}
+                >
+                  <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                  <span className="sr-only">Hapus</span>
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      </ContextMenuTrigger>
+      <ContextMenuContent className="w-40">
+        <ContextMenuItem onClick={onRenameClick}>
+          <Pencil className="h-4 w-4 mr-2" />
+          Ubah Nama
+        </ContextMenuItem>
+        <ContextMenuItem
+          className="text-destructive focus:text-destructive"
+          onClick={onDeleteClick}
+        >
+          <Trash2 className="h-4 w-4 mr-2" />
+          Hapus
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  )
+}
