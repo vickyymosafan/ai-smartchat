@@ -37,12 +37,16 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
 
   const handleDeleteClick = (chatId: string) => {
     setChatToDelete(chatId)
-    setDeleteDialogOpen(true)
+    // Delay AlertDialog opening to let ContextMenu fully close first
+    // This prevents focus management conflicts between Radix components
+    setTimeout(() => {
+      setDeleteDialogOpen(true)
+    }, 100)
   }
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (chatToDelete) {
-      deleteChat(chatToDelete)
+      await deleteChat(chatToDelete)
       setChatToDelete(null)
     }
     setDeleteDialogOpen(false)
@@ -195,7 +199,7 @@ export function Sidebar({ isCollapsed, onToggle, onOpenAbout }: SidebarProps) {
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent onCloseAutoFocus={(e) => e.preventDefault()}>
           <AlertDialogHeader>
             <AlertDialogTitle>Hapus Percakapan?</AlertDialogTitle>
             <AlertDialogDescription>
