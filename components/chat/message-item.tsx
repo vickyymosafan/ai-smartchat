@@ -6,15 +6,32 @@
  * ISP: Uses segregated prop interfaces
  * OCP: Extensible via userAvatar, assistantAvatar, renderContent props
  * SRP: Only handles message rendering
+ * 
+ * Performance: MarkdownRenderer is lazy-loaded to reduce initial bundle
  */
 
 import * as React from "react"
+import dynamic from "next/dynamic"
 import { cn } from "@/lib/utils"
-import { MarkdownRenderer } from "./markdown-renderer"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { User } from "lucide-react"
 import Image from "next/image"
 import type { MessageItemProps } from "@/types/segregated-props"
+
+// Lazy load MarkdownRenderer (~100KB react-markdown bundle)
+// This significantly reduces initial page load time
+const MarkdownRenderer = dynamic(
+  () => import("./markdown-renderer").then((mod) => mod.MarkdownRenderer),
+  {
+    loading: () => (
+      <div className="animate-pulse space-y-2">
+        <div className="h-4 bg-muted rounded w-3/4" />
+        <div className="h-4 bg-muted rounded w-1/2" />
+      </div>
+    ),
+    ssr: false, // Client-side only - improves SSR performance
+  }
+)
 
 // ============================================
 // Default Avatars (OCP - can be overridden)
