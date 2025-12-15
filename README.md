@@ -71,48 +71,6 @@ Asisten AI berbasis chat untuk Universitas Muhammadiyah Jember yang dibangun den
 
    Akses [http://localhost:3000](http://localhost:3000)
 
-## 🗄️ Database Schema
-
-Buat tabel-tabel berikut di Supabase:
-
-```sql
--- Sessions table
-CREATE TABLE sessions (
-  id TEXT PRIMARY KEY,
-  "sessionId" TEXT UNIQUE NOT NULL,
-  "createdAt" TIMESTAMP DEFAULT NOW()
-);
-
--- Chat histories table
-CREATE TABLE chat_histories (
-  id TEXT PRIMARY KEY,
-  "sessionId" TEXT REFERENCES sessions(id),
-  title TEXT NOT NULL,
-  "createdAt" TIMESTAMP DEFAULT NOW(),
-  "updatedAt" TIMESTAMP DEFAULT NOW()
-);
-
--- Messages table
-CREATE TABLE messages (
-  id TEXT PRIMARY KEY,
-  "sessionId" TEXT REFERENCES sessions(id),
-  role TEXT NOT NULL,
-  content TEXT NOT NULL,
-  "createdAt" TIMESTAMP DEFAULT NOW()
-);
-
--- Cached responses table
-CREATE TABLE cached_responses (
-  id TEXT PRIMARY KEY,
-  "questionHash" TEXT UNIQUE NOT NULL,
-  question TEXT NOT NULL,
-  answer TEXT NOT NULL,
-  "hitCount" INTEGER DEFAULT 1,
-  "createdAt" TIMESTAMP DEFAULT NOW(),
-  "expiresAt" TIMESTAMP NOT NULL
-);
-```
-
 ## 🚀 Deployment ke Vercel
 
 1. **Push ke GitHub**
