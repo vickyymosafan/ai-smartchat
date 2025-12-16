@@ -1,0 +1,599 @@
+openapi: 3.0.3
+info:
+  title: AI SmartChat API
+  description: |
+    API for AI SmartChat application - A smart chat application with AI responses,
+    session management, chat history, and background music features.
+  version: 1.0.0
+  contact:
+    name: AI SmartChat Team
+
+servers:
+  - url: /api
+    description: Local API server
+
+tags:
+  - name: Chat
+    description: Send messages and receive AI responses
+  - name: Chats
+    description: Chat history management (CRUD operations)
+  - name: Messages
+    description: Message management for chat conversations
+  - name: Music
+    description: Background music playlist
+  - name: Sessions
+    description: User session management
+
+paths:
+  # ============================================
+  # CHAT - AI Message Exchange
+  # ============================================
+  /chat:
+    post:
+      tags:
+        - Chat
+      summary: Send message to AI
+      description: Send a user message and receive an AI-generated response. Responses may be cached for performance.
+      operationId: sendMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendMessageRequest"
+      responses:
+        "200":
+          description: Successful response from AI
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SendMessageResponse"
+        "400":
+          description: Bad request - message is required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ============================================
+  # CHATS - Chat History CRUD
+  # ============================================
+  /chats:
+    get:
+      tags:
+        - Chats
+      summary: Get all chat histories
+      description: Retrieve all chat histories for a given session
+      operationId: getChats
+      parameters:
+        - name: sessionId
+          in: query
+          required: true
+          description: The session identifier
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of chat histories
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetChatsResponse"
+
+    post:
+      tags:
+        - Chats
+      summary: Create a new chat
+      description: Create a new chat conversation
+      operationId: createChat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateChatRequest"
+      responses:
+        "200":
+          description: Chat created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateChatResponse"
+        "400":
+          description: Bad request - sessionId and chatId required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    patch:
+      tags:
+        - Chats
+      summary: Rename a chat
+      description: Update the title of an existing chat
+      operationId: renameChat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RenameChatRequest"
+      responses:
+        "200":
+          description: Chat renamed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateChatResponse"
+        "400":
+          description: Bad request - chatId and title required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    delete:
+      tags:
+        - Chats
+      summary: Delete a chat
+      description: Delete a chat and all its messages
+      operationId: deleteChat
+      parameters:
+        - name: chatId
+          in: query
+          required: true
+          description: The chat ID to delete
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Chat deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteChatResponse"
+        "400":
+          description: Bad request - chatId required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ============================================
+  # MESSAGES - Message Management
+  # ============================================
+  /messages:
+    get:
+      tags:
+        - Messages
+      summary: Get messages for a chat
+      description: Retrieve all messages for a specific chat or session
+      operationId: getMessages
+      parameters:
+        - name: chatId
+          in: query
+          required: false
+          description: The chat ID to get messages for (preferred)
+          schema:
+            type: string
+        - name: sessionId
+          in: query
+          required: false
+          description: The session ID (fallback if chatId not provided)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetMessagesResponse"
+
+    post:
+      tags:
+        - Messages
+      summary: Create a new message
+      description: Create a new message in a chat session
+      operationId: createMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateMessageRequest"
+      responses:
+        "200":
+          description: Message created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateMessageResponse"
+        "400":
+          description: Bad request - role and content required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ============================================
+  # MUSIC - Background Music Playlist
+  # ============================================
+  /music:
+    get:
+      tags:
+        - Music
+      summary: Get music playlist
+      description: Retrieve the background music playlist
+      operationId: getPlaylist
+      responses:
+        "200":
+          description: Music playlist
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetPlaylistResponse"
+
+  # ============================================
+  # SESSIONS - Session Management
+  # ============================================
+  /sessions:
+    post:
+      tags:
+        - Sessions
+      summary: Create or get session
+      description: Create a new session or retrieve an existing one
+      operationId: createOrGetSession
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSessionRequest"
+      responses:
+        "200":
+          description: Session created or retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateSessionResponse"
+        "400":
+          description: Bad request - sessionId required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+# ============================================
+# COMPONENTS - Schemas
+# ============================================
+components:
+  schemas:
+    # ---------- Common ----------
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        response:
+          type: string
+          description: Optional fallback response message
+
+    # ---------- Session ----------
+    Session:
+      type: object
+      required:
+        - id
+        - sessionId
+        - expiresAt
+        - lastActivityAt
+        - messageCount
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique session UUID
+        sessionId:
+          type: string
+          description: Client-provided session identifier
+        expiresAt:
+          type: string
+          format: date-time
+          description: Session expiration timestamp
+        ipAddress:
+          type: string
+          description: Client IP address
+        userAgent:
+          type: string
+          description: Client user agent
+        lastActivityAt:
+          type: string
+          format: date-time
+          description: Last activity timestamp
+        messageCount:
+          type: integer
+          description: Total message count in session
+        createdAt:
+          type: string
+          format: date-time
+          description: Session creation timestamp
+
+    CreateSessionRequest:
+      type: object
+      required:
+        - sessionId
+      properties:
+        sessionId:
+          type: string
+          description: Client-generated session identifier
+
+    CreateSessionResponse:
+      type: object
+      properties:
+        session:
+          $ref: "#/components/schemas/Session"
+
+    # ---------- ChatHistory ----------
+    ChatHistory:
+      type: object
+      required:
+        - id
+        - sessionId
+        - title
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          description: Unique chat ID
+        sessionId:
+          type: string
+          description: Associated session UUID
+        title:
+          type: string
+          description: Chat title/summary
+        createdAt:
+          type: string
+          format: date-time
+          description: Chat creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+
+    GetChatsResponse:
+      type: object
+      properties:
+        chatHistories:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChatHistory"
+
+    CreateChatRequest:
+      type: object
+      required:
+        - sessionId
+        - chatId
+      properties:
+        sessionId:
+          type: string
+          description: Session identifier
+        chatId:
+          type: string
+          description: Client-generated chat ID
+        title:
+          type: string
+          description: Initial chat title
+          default: "Percakapan Baru"
+
+    CreateChatResponse:
+      type: object
+      properties:
+        chat:
+          $ref: "#/components/schemas/ChatHistory"
+
+    RenameChatRequest:
+      type: object
+      required:
+        - chatId
+        - title
+      properties:
+        chatId:
+          type: string
+          description: Chat ID to rename
+        title:
+          type: string
+          description: New chat title
+
+    DeleteChatResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether deletion was successful
+
+    # ---------- Message ----------
+    Message:
+      type: object
+      required:
+        - id
+        - sessionId
+        - role
+        - content
+        - createdAt
+      properties:
+        id:
+          type: string
+          description: Unique message ID
+        sessionId:
+          type: string
+          description: Associated session UUID
+        role:
+          type: string
+          enum:
+            - user
+            - assistant
+          description: Message sender role
+        content:
+          type: string
+          description: Message content
+        createdAt:
+          type: string
+          format: date-time
+          description: Message creation timestamp
+
+    GetMessagesResponse:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Message"
+
+    CreateMessageRequest:
+      type: object
+      required:
+        - sessionId
+        - role
+        - content
+      properties:
+        sessionId:
+          type: string
+          description: Session/Chat identifier
+        role:
+          type: string
+          enum:
+            - user
+            - assistant
+          description: Message sender role
+        content:
+          type: string
+          description: Message content
+
+    CreateMessageResponse:
+      type: object
+      properties:
+        message:
+          $ref: "#/components/schemas/Message"
+
+    # ---------- Chat (AI) ----------
+    SendMessageRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: User message to send to AI
+        sessionId:
+          type: string
+          description: Session identifier
+        chatId:
+          type: string
+          description: Chat ID for message context
+
+    SendMessageResponse:
+      type: object
+      properties:
+        response:
+          type: string
+          description: AI-generated response
+        sessionId:
+          type: string
+          description: Session identifier
+        chatId:
+          type: string
+          description: Chat ID
+        cached:
+          type: boolean
+          description: Whether response was from cache
+
+    # ---------- Music ----------
+    BackgroundMusic:
+      type: object
+      required:
+        - id
+        - title
+        - artist
+        - url
+        - isActive
+        - order
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          description: Unique music track ID
+        title:
+          type: string
+          description: Track title
+        artist:
+          type: string
+          description: Artist name
+        url:
+          type: string
+          format: uri
+          description: Audio file URL
+        lyrics:
+          type: string
+          description: Song lyrics (optional)
+        isActive:
+          type: boolean
+          description: Whether track is active in playlist
+        order:
+          type: integer
+          description: Track order in playlist
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+
+    GetPlaylistResponse:
+      type: object
+      properties:
+        playlist:
+          type: array
+          items:
+            $ref: "#/components/schemas/BackgroundMusic"

@@ -543,3 +543,399 @@ html[data-color-scheme="netral"].dark {
     transition-duration: 150ms !important;
   }
 }
+
+/* ================================
+   SWAGGER UI STYLES - NETRAL COLOR SCHEME LIGHT
+   Hardcoded values from NETRAL theme for consistency
+   
+   NETRAL LIGHT VALUES:
+   - background: #fcfcfc (oklch 0.99)
+   - foreground: #000000 (oklch 0)
+   - card: #ffffff (oklch 1)
+   - primary: #000000
+   - primary-foreground: #ffffff
+   - secondary: #efefef (oklch 0.94)
+   - muted: #f7f7f7 (oklch 0.97)
+   - muted-foreground: #6e6e6e (oklch 0.44)
+   - border: #ebebeb (oklch 0.92)
+   - input: #efefef (oklch 0.94)
+   - accent: #efefef (oklch 0.94)
+   - radius: 0.5rem
+   ================================ */
+
+/* Force light theme on api-docs page */
+.api-docs-layout {
+  background: #fcfcfc !important;
+  min-height: 100vh;
+  overflow: auto;
+}
+
+/* Swagger UI Container - force white background */
+#swagger-ui {
+  overflow: visible;
+  background: #fcfcfc !important;
+}
+
+/* Force all swagger-ui text to black */
+.swagger-ui,
+.swagger-ui * {
+  color: #000000;
+}
+
+/* Hide topbar */
+.swagger-ui .topbar {
+  display: none !important;
+}
+
+/* Main wrapper */
+.swagger-ui .wrapper {
+  padding: 20px 40px;
+  background: #fcfcfc !important;
+}
+
+/* Info section */
+.swagger-ui .information-container {
+  background: #fcfcfc !important;
+}
+
+/* Title and info */
+.swagger-ui .info .title {
+  font-size: 2.5rem !important;
+  color: #000000 !important;
+  font-weight: 700;
+}
+
+.swagger-ui .info {
+  margin: 30px 0;
+}
+
+.swagger-ui .info .description,
+.swagger-ui .info .description p,
+.swagger-ui .info .description span {
+  color: #000000 !important;
+}
+
+.swagger-ui .info a {
+  color: #000000 !important;
+}
+
+/* Tags/sections */
+.swagger-ui .opblock-tag {
+  color: #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  font-weight: 600;
+  background: transparent !important;
+}
+
+.swagger-ui .opblock-tag:hover {
+  background: #f7f7f7 !important;
+}
+
+.swagger-ui .opblock-tag-section {
+  background: transparent !important;
+}
+
+/* All operation blocks */
+.swagger-ui .opblock {
+  border-radius: 0.5rem !important;
+  margin: 8px 0 !important;
+  border: 1px solid #cccccc !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.swagger-ui .opblock .opblock-summary {
+  border-radius: 0.5rem !important;
+  background: #f5f5f5 !important;
+  border: none !important;
+}
+
+.swagger-ui .opblock .opblock-summary:hover {
+  background: #ebebeb !important;
+}
+
+/* HTTP method badges - BLACK */
+.swagger-ui .opblock.opblock-get .opblock-summary-method,
+.swagger-ui .opblock.opblock-post .opblock-summary-method,
+.swagger-ui .opblock.opblock-put .opblock-summary-method,
+.swagger-ui .opblock.opblock-delete .opblock-summary-method,
+.swagger-ui .opblock.opblock-patch .opblock-summary-method,
+.swagger-ui .opblock.opblock-options .opblock-summary-method {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600;
+}
+
+/* Operation block backgrounds - override colored backgrounds */
+.swagger-ui .opblock.opblock-get {
+  background: #ffffff !important;
+  border-color: #cccccc !important;
+}
+
+.swagger-ui .opblock.opblock-post {
+  background: #ffffff !important;
+  border-color: #cccccc !important;
+}
+
+.swagger-ui .opblock.opblock-put {
+  background: #ffffff !important;
+  border-color: #cccccc !important;
+}
+
+.swagger-ui .opblock.opblock-delete {
+  background: #ffffff !important;
+  border-color: #cccccc !important;
+}
+
+.swagger-ui .opblock.opblock-patch {
+  background: #ffffff !important;
+  border-color: #cccccc !important;
+}
+
+/* Summary path text */
+.swagger-ui .opblock .opblock-summary-path,
+.swagger-ui .opblock .opblock-summary-path span {
+  color: #000000 !important;
+}
+
+.swagger-ui .opblock .opblock-summary-description {
+  color: #6e6e6e !important;
+}
+
+/* Operation body */
+.swagger-ui .opblock-body {
+  background: #ffffff !important;
+}
+
+.swagger-ui .opblock-body pre {
+  background: #f5f5f5 !important;
+  color: #000000 !important;
+}
+
+.swagger-ui .opblock-body pre span {
+  color: #000000 !important;
+}
+
+/* Buttons */
+.swagger-ui .btn {
+  border-radius: 0.5rem !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.swagger-ui .btn:hover {
+  background: #333333 !important;
+  color: #ffffff !important;
+}
+
+.swagger-ui .btn.execute {
+  background: #000000 !important;
+  border: none !important;
+}
+
+.swagger-ui .btn.execute:hover {
+  background: #333333 !important;
+}
+
+.swagger-ui .btn.cancel {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+}
+
+.swagger-ui .btn.cancel:hover {
+  background: #f5f5f5 !important;
+}
+
+/* Try it out button */
+.swagger-ui .try-out__btn {
+  background: transparent !important;
+  border: 1px solid #000000 !important;
+  color: #000000 !important;
+}
+
+/* Inputs */
+.swagger-ui select,
+.swagger-ui input[type="text"],
+.swagger-ui input[type="email"],
+.swagger-ui input[type="file"],
+.swagger-ui input[type="password"],
+.swagger-ui input[type="search"],
+.swagger-ui textarea {
+  border-radius: 0.5rem !important;
+  border: 1px solid #cccccc !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Models section */
+.swagger-ui .model-box,
+.swagger-ui section.models {
+  border-radius: 0.5rem !important;
+  border: 1px solid #cccccc !important;
+  background: #ffffff !important;
+}
+
+.swagger-ui section.models h4,
+.swagger-ui section.models h4 span {
+  color: #000000 !important;
+}
+
+.swagger-ui .model-container {
+  background: #ffffff !important;
+}
+
+.swagger-ui .model {
+  color: #000000 !important;
+}
+
+/* Response section */
+.swagger-ui .responses-wrapper,
+.swagger-ui .response-col_status,
+.swagger-ui .response-col_description {
+  color: #000000 !important;
+}
+
+.swagger-ui table thead tr th,
+.swagger-ui table thead tr td {
+  color: #000000 !important;
+  border-color: #cccccc !important;
+}
+
+.swagger-ui table tbody tr td {
+  color: #000000 !important;
+  border-color: #ebebeb !important;
+}
+
+/* Parameters section */
+.swagger-ui .parameters-col_name,
+.swagger-ui .parameters-col_description {
+  color: #000000 !important;
+}
+
+.swagger-ui .parameter__name {
+  color: #000000 !important;
+}
+
+.swagger-ui .parameter__type {
+  color: #6e6e6e !important;
+}
+
+.swagger-ui .parameter__in {
+  color: #6e6e6e !important;
+}
+
+/* Filter input */
+.swagger-ui .filter-container {
+  background: #fcfcfc !important;
+}
+
+.swagger-ui .filter-container input {
+  border: 1px solid #cccccc !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+.swagger-ui .filter-container input::placeholder {
+  color: #6e6e6e !important;
+}
+
+/* Scheme container */
+.swagger-ui .scheme-container {
+  background: #f7f7f7 !important;
+  padding: 20px !important;
+  border-radius: 0.5rem !important;
+  box-shadow: none !important;
+}
+
+.swagger-ui .scheme-container label {
+  color: #000000 !important;
+}
+
+/* Server dropdown */
+.swagger-ui .servers > label {
+  color: #000000 !important;
+}
+
+.swagger-ui .servers-title {
+  color: #000000 !important;
+}
+
+/* Links */
+.swagger-ui a {
+  color: #000000 !important;
+}
+
+.swagger-ui a:hover {
+  color: #6e6e6e !important;
+}
+
+/* Code blocks */
+.swagger-ui .highlight-code,
+.swagger-ui pre.microlight {
+  background: #f5f5f5 !important;
+  color: #000000 !important;
+}
+
+.swagger-ui code,
+.swagger-ui pre {
+  background: #f5f5f5 !important;
+  color: #000000 !important;
+}
+
+/* Version badge */
+.swagger-ui .info .title small {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+.swagger-ui .info .title small.version-stamp {
+  background: #000000 !important;
+}
+
+/* Tab section */
+.swagger-ui .tab li {
+  color: #000000 !important;
+}
+
+.swagger-ui .tab li.active {
+  color: #000000 !important;
+  border-bottom-color: #000000 !important;
+}
+
+/* Response wrapper */
+.swagger-ui .responses-inner {
+  background: #ffffff !important;
+}
+
+/* Loading */
+.swagger-ui .loading-container {
+  background: #fcfcfc !important;
+}
+
+/* Arrow/expand icons */
+.swagger-ui .expand-operation svg,
+.swagger-ui .arrow svg {
+  fill: #000000 !important;
+}
+
+/* Markdown rendered content */
+.swagger-ui .markdown p,
+.swagger-ui .markdown li,
+.swagger-ui .renderedMarkdown p {
+  color: #000000 !important;
+}
+
+/* JSON/example section */
+.swagger-ui .example,
+.swagger-ui .examples-select {
+  background: #f5f5f5 !important;
+}
+
+/* Required label */
+.swagger-ui .parameter__name.required::after {
+  color: #dc2626 !important;
+}
+
