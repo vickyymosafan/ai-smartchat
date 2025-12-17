@@ -31,7 +31,7 @@ export default function manifest(): MetadataRoute.Manifest {
       src: getIconPath(size),
       sizes: size,
       type: PWA_ICONS.type,
-      purpose: "any maskable",
+      purpose: "maskable" as const,
     })),
     // Categories for app stores
     categories: ["productivity", "utilities", "education"],
