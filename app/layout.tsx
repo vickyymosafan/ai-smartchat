@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 
 import { Analytics } from "@vercel/analytics/next";
 import { AppProviders } from "@/components/providers/app-providers";
+import { APP_METADATA, PWA_THEME_COLORS, SERVICE_WORKER } from "@/lib/pwa/config";
 import "./globals.css";
 
 import { Geist, Geist_Mono } from "next/font/google";
@@ -23,25 +24,43 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
+/**
+ * Metadata using centralized PWA config
+ * @see lib/pwa/config.ts for single source of truth
+ */
 export const metadata: Metadata = {
-  title: "Smartchat AI Assistant",
-  description:
-    "Mulai percakapan dengan AI untuk bantuan, saran, dan pertanyaan",
+  title: APP_METADATA.name,
+  description: APP_METADATA.description,
   generator: "v0.app",
   icons: {
     icon: "/UMJ.png",
     apple: "/UMJ.png",
   },
+  // PWA specific metadata
+  applicationName: APP_METADATA.shortName,
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: APP_METADATA.shortName,
+    // Intentionally NOT setting startupImage for minimal/invisible splash
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
+/**
+ * Viewport with theme colors for "invisible splash" technique
+ * Colors match app background for seamless PWA launch transition
+ */
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f0f0f" },
+    { media: "(prefers-color-scheme: light)", color: PWA_THEME_COLORS.light },
+    { media: "(prefers-color-scheme: dark)", color: PWA_THEME_COLORS.dark },
   ],
 };
 
@@ -55,6 +74,18 @@ export default function RootLayout({
       <head>
         {/* Preload critical above-the-fold images */}
         <link rel="preload" href="/UMJ.png" as="image" type="image/png" />
+        {/* Service Worker Registration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                  navigator.serviceWorker.register('${SERVICE_WORKER.path}', { scope: '${SERVICE_WORKER.scope}' });
+                });
+              }
+            `,
+          }}
+        />
       </head>
       <body className="font-sans antialiased overflow-hidden touch-manipulation">
         <AppProviders>{children}</AppProviders>
@@ -63,3 +94,4 @@ export default function RootLayout({
     </html>
   );
 }
+
