@@ -10,7 +10,7 @@
  */
 
 const CACHE_NAME = "smartchat-v1";
-const STATIC_ASSETS = ["/", "/UMJ.png", "/icons/icon-192.png", "/icons/icon-512.png"];
+const STATIC_ASSETS = ["/", "/UMJ.webp"];
 
 // Install event - cache static assets
 self.addEventListener("install", (event) => {

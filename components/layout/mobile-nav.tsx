@@ -66,7 +66,7 @@ export function MobileNav({ onOpenAbout }: MobileNavProps) {
         <SheetContent side="left" className="w-[85vw] max-w-80 p-0 flex flex-col">
           <SheetHeader className="p-3 sm:p-4 border-b">
             <SheetTitle className="flex items-center gap-2 text-sm sm:text-base">
-              <Image src="/UMJ.png" alt="Logo" width={32} height={32} className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg" />
+              <Image src="/UMJ.webp" alt="Logo" width={32} height={32} className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg" />
               Smartchat Assistant
             </SheetTitle>
             <SheetDescription className="sr-only">

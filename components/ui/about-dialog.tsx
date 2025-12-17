@@ -13,7 +13,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Image src="/UMJ.png" alt="Logo" width={40} height={40} className="rounded-lg" />
+            <Image src="/UMJ.webp" alt="Logo" width={40} height={40} className="rounded-lg" />
             Smartchat AI Assistant
           </DialogTitle>
           <DialogDescription>

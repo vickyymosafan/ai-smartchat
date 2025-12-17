@@ -47,7 +47,7 @@ const DefaultUserAvatar = () => (
 
 const DefaultAssistantAvatar = () => (
   <Image 
-    src="/UMJ.png" 
+    src="/UMJ.webp" 
     alt="AI" 
     width={32} 
     height={32} 

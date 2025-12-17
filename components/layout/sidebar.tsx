@@ -155,7 +155,7 @@ export function Sidebar({
         <div className="flex items-center justify-between p-2 sm:p-3 border-b border-sidebar-border">
           <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
             <Image 
-              src="/UMJ.png" 
+              src="/UMJ.webp" 
               alt="Logo" 
               width={32} 
               height={32} 

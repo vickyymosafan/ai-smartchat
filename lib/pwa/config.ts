@@ -40,22 +40,30 @@ export const PWA_THEME_COLORS = {
 export const PWA_DISPLAY_MODE = "standalone" as const;
 
 /**
- * PWA Icon configuration
- * Defines required icon sizes for manifest
+ * App Logo configuration
+ * Single source of truth for logo/icon path
  */
-export const PWA_ICONS = {
-  sizes: ["192x192", "512x512"] as const,
-  basePath: "/icons",
-  type: "image/png",
+export const APP_LOGO = {
+  path: "/UMJ.webp",
+  type: "image/webp",
 } as const;
 
 /**
- * Get icon path for a specific size
- * @param size - Icon size (e.g., "192x192")
- * @returns Full path to the icon
+ * PWA Icon configuration
+ * Uses single logo file for all PWA icon sizes
  */
-export function getIconPath(size: string): string {
-  return `${PWA_ICONS.basePath}/icon-${size.split("x")[0]}.png`;
+export const PWA_ICONS = {
+  sizes: ["192x192", "512x512"] as const,
+  type: APP_LOGO.type,
+} as const;
+
+/**
+ * Get icon path for PWA manifest
+ * @param _size - Icon size (ignored, uses single logo file)
+ * @returns Path to the logo file
+ */
+export function getIconPath(_size: string): string {
+  return APP_LOGO.path;
 }
 
 /**

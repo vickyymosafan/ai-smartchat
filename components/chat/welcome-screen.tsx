@@ -9,7 +9,7 @@ export function WelcomeScreen() {
       <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
         {/* Logo */}
         <div className="flex justify-center mb-3 sm:mb-4">
-          <Image src="/UMJ.png" alt="Logo" width={64} height={64} className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl shadow-lg" />
+          <Image src="/UMJ.webp" alt="Logo" width={64} height={64} className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl shadow-lg" />
         </div>
 
         {/* Title */}

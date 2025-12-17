@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from "next";
 
 import { Analytics } from "@vercel/analytics/next";
 import { AppProviders } from "@/components/providers/app-providers";
-import { APP_METADATA, PWA_THEME_COLORS, SERVICE_WORKER } from "@/lib/pwa/config";
+import { APP_METADATA, PWA_THEME_COLORS, SERVICE_WORKER, APP_LOGO } from "@/lib/pwa/config";
 import "./globals.css";
 
 import { Geist, Geist_Mono } from "next/font/google";
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
   description: APP_METADATA.description,
   generator: "v0.app",
   icons: {
-    icon: "/UMJ.png",
-    apple: "/UMJ.png",
+    icon: APP_LOGO.path,
+    apple: APP_LOGO.path,
   },
   // PWA specific metadata
   applicationName: APP_METADATA.shortName,
@@ -73,7 +73,7 @@ export default function RootLayout({
     <html lang="id" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
         {/* Preload critical above-the-fold images */}
-        <link rel="preload" href="/UMJ.png" as="image" type="image/png" />
+        <link rel="preload" href={APP_LOGO.path} as="image" type={APP_LOGO.type} />
         {/* Service Worker Registration */}
         <script
           dangerouslySetInnerHTML={{
