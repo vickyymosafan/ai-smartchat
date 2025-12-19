@@ -1,9 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getSupabaseServerClient } from "@/lib/supabase"
 import { getSessionUUID } from "@/lib/session-helper"
-import { getCachedResponse, saveCachedResponse } from "@/lib/cache-helper"
 import { extractAIResponse } from "@/lib/ai-response-parser"
-import { generateId, nowISO } from "@/lib/utils"
 
 const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL
 
@@ -54,39 +52,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // ========== CACHE CHECK ==========
-    // Step 1: Check if response is cached
-    const cachedAnswer = await getCachedResponse(supabase, message)
-    
-    if (cachedAnswer) {
-      // CACHE HIT - Return cached response
-      console.log("CACHE HIT - Returning cached response")
-      
-      // Save assistant message to database
-      if (chatId && sessionUUID) {
-        await supabase.from("messages").insert({
-          id: `msg_${Date.now()}_assistant`,
-          sessionId: sessionUUID,
-          role: "assistant",
-          content: cachedAnswer,
-          createdAt: new Date().toISOString(),
-        })
-
-        await supabase.from("chat_histories").update({ updatedAt: new Date().toISOString() }).eq("id", chatId)
-      }
-
-      return NextResponse.json({
-        response: cachedAnswer,
-        sessionId,
-        chatId,
-        cached: true,
-      })
-    }
-
-    // ========== CACHE MISS - Call n8n ==========
-    console.log("CACHE MISS - Calling n8n RAG Neural")
-
-    // n8n chat webhooks typically expect these fields
+    // Call n8n webhook directly (caching is handled at n8n layer)
     const payload = {
       action: "sendMessage",
       sessionId: sessionId || chatId,
@@ -123,10 +89,6 @@ export async function POST(request: NextRequest) {
     // Extract the actual response using simplified parser
     const aiResponse = extractAIResponse(data)
 
-    // ========== SAVE TO CACHE ==========
-    // Save the new response to cache for future use
-    await saveCachedResponse(supabase, message, aiResponse)
-
     // Save assistant message to database
     if (chatId && sessionUUID) {
       await supabase.from("messages").insert({
@@ -145,7 +107,6 @@ export async function POST(request: NextRequest) {
       response: aiResponse,
       sessionId,
       chatId,
-      cached: false,
     })
   } catch (error) {
     console.error("Chat API error:", error)
@@ -169,3 +130,4 @@ export async function OPTIONS() {
     },
   })
 }
+

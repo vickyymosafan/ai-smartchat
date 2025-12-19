@@ -12,7 +12,6 @@ export interface CreateChatResponse {
 
 export interface SendMessageResponse {
   response: string
-  cached: boolean
   error?: string
 }
 
@@ -96,7 +95,6 @@ export async function sendChatMessage(
     if (!response.ok) {
       return {
         response: "Maaf, terjadi kesalahan saat memproses pesan Anda.",
-        cached: false,
         error: "Failed to send message",
       }
     }
@@ -104,13 +102,11 @@ export async function sendChatMessage(
     const data = await response.json()
     return {
       response: data.response || "Maaf, saya tidak dapat memproses permintaan Anda.",
-      cached: data.cached || false,
     }
   } catch (error) {
     console.error("Failed to send message:", error)
     return {
       response: "Maaf, terjadi kesalahan saat memproses pesan Anda.",
-      cached: false,
       error: error instanceof Error ? error.message : String(error),
     }
   }

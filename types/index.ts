@@ -26,17 +26,6 @@ export interface Message {
   createdAt: string;
 }
 
-export interface CachedResponse {
-  id: string;
-  questionHash: string;
-  question: string;
-  answer: string;
-  hitCount: number;
-  createdAt: string;
-  expiresAt: string;
-  lastAccessedAt: string;
-}
-
 export interface BackgroundMusic {
   id: string;
   title: string;

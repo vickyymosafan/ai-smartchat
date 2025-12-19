@@ -21,7 +21,6 @@ export interface CreateChatResponse {
 
 export interface SendMessageResponse {
   response: string
-  cached: boolean
   error?: string
 }
 

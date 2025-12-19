@@ -44,7 +44,6 @@ export const mockChatApiAdapter: ChatApiAdapter = {
   getMessages: async () => [],
   sendMessage: async (message) => ({
     response: `Mock response to: ${message}`,
-    cached: false,
   }),
   deleteChat: async () => true,
   renameChat: async () => true,
@@ -92,7 +91,7 @@ export const offlineChatApiAdapter: ChatApiAdapter = {
       createdAt: new Date().toISOString(),
     })
     localStorage.setItem(`offline-messages-${chatId}`, JSON.stringify(messages))
-    return { response: 'Offline mode: AI responses are not available.', cached: false }
+    return { response: 'Offline mode: AI responses are not available.' }
   },
   deleteChat: async (chatId) => {
     const chats = JSON.parse(localStorage.getItem('offline-chats') || '[]')

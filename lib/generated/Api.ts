@@ -157,8 +157,6 @@ export interface SendMessageResponse {
   sessionId?: string;
   /** Chat ID */
   chatId?: string;
-  /** Whether response was from cache */
-  cached?: boolean;
 }
 
 export interface BackgroundMusic {
@@ -220,7 +218,7 @@ export interface GetMessagesParams {
 
 export namespace Chat {
   /**
-   * @description Send a user message and receive an AI-generated response. Responses may be cached for performance.
+   * @description Send a user message and receive an AI-generated response.
    * @tags Chat
    * @name SendMessage
    * @summary Send message to AI

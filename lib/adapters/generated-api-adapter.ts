@@ -76,13 +76,11 @@ export const generatedChatApiAdapter: ChatApiAdapter = {
 
       return {
         response: response.data.response || 'Maaf, saya tidak dapat memproses permintaan Anda.',
-        cached: response.data.cached || false,
       };
     } catch (error) {
       console.error('Failed to send message:', error);
       return {
         response: 'Maaf, terjadi kesalahan saat memproses pesan Anda.',
-        cached: false,
         error: error instanceof Error ? error.message : String(error),
       };
     }

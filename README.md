@@ -9,7 +9,6 @@ Asisten AI berbasis chat untuk Universitas Muhammadiyah Jember yang dibangun den
 - 💾 Riwayat percakapan tersimpan di database
 - 🎵 Musik latar dengan lirik
 - 🌙 Mode gelap dan terang
-- ⚡ Response caching untuk performa optimal
 - 📱 Responsive design untuk semua device
 
 ## 🛠️ Tech Stack
@@ -150,7 +149,6 @@ Untuk membuat aplikasi Android:
 │   ├── providers/         # Context providers
 │   └── ui/                # UI components (shadcn)
 ├── lib/
-│   ├── cache-helper.ts    # Response caching
 │   ├── session-helper.ts  # Session management
 │   ├── supabase.ts        # Supabase client
 │   └── utils.ts           # Utility functions

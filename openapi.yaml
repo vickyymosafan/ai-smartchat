@@ -33,7 +33,7 @@ paths:
       tags:
         - Chat
       summary: Send message to AI
-      description: Send a user message and receive an AI-generated response. Responses may be cached for performance.
+      description: Send a user message and receive an AI-generated response.
       operationId: sendMessage
       requestBody:
         required: true
@@ -542,9 +542,6 @@ components:
         chatId:
           type: string
           description: Chat ID
-        cached:
-          type: boolean
-          description: Whether response was from cache
 
     # ---------- Music ----------
     BackgroundMusic:
