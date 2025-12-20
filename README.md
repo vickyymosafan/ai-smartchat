@@ -153,7 +153,7 @@ Untuk membuat aplikasi Android:
 │   ├── supabase.ts        # Supabase client
 │   └── utils.ts           # Utility functions
 ├── public/
-│   └── UMJ.png            # Logo
+│   └── UMJ.webp           # Logo
 └── types/
     └── index.ts           # TypeScript types
 ```
