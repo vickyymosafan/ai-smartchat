@@ -10,3 +10,5 @@ export { useMessages } from './useMessages'
 export { useEditableItem } from './useEditableItem'
 export { useConfirmDialog } from './useConfirmDialog'
 export { useMediaQuery, useIsMobile, useIsTablet, useIsDesktop, usePrefersReducedMotion, useHydrated } from './useMediaQuery'
+export { useSpeechRecognition } from './useSpeechRecognition'
+
