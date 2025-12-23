@@ -64,7 +64,7 @@ export const ThinkingIndicator = React.memo(function ThinkingIndicator({
   const phaseConfig = PHASE_CONFIG[currentPhase]
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn("w-full pb-4 mb-3", className)}>
       <div className="max-w-4xl mx-auto px-3 sm:px-4">
         <div className="bg-muted/50 backdrop-blur-sm rounded-xl border border-border/50 overflow-hidden">
           {/* Header - Clickable to collapse/expand */}
