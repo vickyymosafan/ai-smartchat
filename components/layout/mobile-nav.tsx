@@ -21,6 +21,19 @@ import {
 } from "@/components/ui/alert-dialog"
 import { cn } from "@/lib/utils"
 
+// ============================================
+// Dynamic Title Sizing (based on character length)
+// ============================================
+
+function getTitleSizeClass(title: string): string {
+  const len = title.length
+  
+  if (len <= 25) return "text-sm"           // Short: 14px
+  if (len <= 40) return "text-xs"           // Medium: 12px  
+  if (len <= 60) return "text-[11px]"       // Long: 11px
+  return "text-[10px]"                      // Very long: 10px (minimum)
+}
+
 interface MobileNavProps {
   onOpenAbout: () => void
 }
@@ -109,7 +122,12 @@ export function MobileNav({ onOpenAbout }: MobileNavProps) {
                           onClick={() => handleSelectChat(chat.id)}
                         >
                           <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 opacity-70" />
-                          <span className="flex-1 truncate text-xs sm:text-sm">{chat.title}</span>
+                          <span className={cn(
+                            "flex-1 line-clamp-2 wrap-break-word leading-tight",
+                            getTitleSizeClass(chat.title)
+                          )}>
+                            {chat.title}
+                          </span>
                         </div>
                       </ContextMenuTrigger>
                       <ContextMenuContent className="w-40">
