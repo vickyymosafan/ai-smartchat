@@ -135,7 +135,7 @@ export const ThinkingIndicator = React.memo(function ThinkingIndicator({
               {/* Progress bar */}
               <div className="mt-3 h-1 bg-muted rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-primary/50 to-primary rounded-full transition-all duration-500"
+                  className="h-full bg-linear-to-r from-primary/50 to-primary rounded-full transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>
