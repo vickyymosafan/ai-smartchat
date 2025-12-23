@@ -100,8 +100,10 @@ export function ChatProvider({
       // Message state & actions
       messages: messages.messages,
       isLoading: messages.isLoading,
+      thinkingState: messages.thinkingState,
       error: messages.error,
       sendMessage: messages.sendMessage,
+      skipThinking: messages.skipThinking,
       clearError: messages.clearError,
     }),
     [session, chatHistory, messages]

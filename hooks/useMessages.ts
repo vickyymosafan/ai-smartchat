@@ -12,7 +12,9 @@
 import * as React from "react"
 import type { Message } from "@/types"
 import type { ChatApiAdapter } from "@/types/adapters"
+import type { ThinkingState } from "@/types/segregated-props"
 import { generateId, nowISO } from "@/lib/utils"
+import { useThinkingIndicator } from "./useThinkingIndicator"
 
 // Default adapter using existing API service
 import {
@@ -37,9 +39,11 @@ interface UseMessagesOptions {
 interface MessageActions {
   messages: Message[]
   isLoading: boolean
+  thinkingState: ThinkingState
   error: string | null
   loadMessages: (chatId: string) => Promise<void>
   sendMessage: (content: string) => Promise<void>
+  skipThinking: () => void
   clearError: () => void
   clearMessages: () => void
 }
@@ -58,6 +62,9 @@ export function useMessages(options: UseMessagesOptions): MessageActions {
   const [isLoading, setIsLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
 
+  // Thinking indicator state
+  const thinkingIndicator = useThinkingIndicator()
+
   // Load messages for a chat
   const loadMessages = React.useCallback(async (chatId: string) => {
     const msgs = await adapter.getMessages(chatId)
@@ -70,6 +77,7 @@ export function useMessages(options: UseMessagesOptions): MessageActions {
 
     setIsLoading(true)
     setError(null)
+    thinkingIndicator.start(content)
 
     let chatId = currentChatId
 
@@ -121,6 +129,7 @@ export function useMessages(options: UseMessagesOptions): MessageActions {
       setError(err instanceof Error ? err.message : "An error occurred")
     } finally {
       setIsLoading(false)
+      thinkingIndicator.stop()
     }
   }, [currentChatId, sessionId, isLoading, isSessionReady, onChatCreated, onHistoryRefresh, adapter])
 
@@ -137,9 +146,11 @@ export function useMessages(options: UseMessagesOptions): MessageActions {
   return {
     messages,
     isLoading,
+    thinkingState: thinkingIndicator,
     error,
     loadMessages,
     sendMessage,
+    skipThinking: thinkingIndicator.skip,
     clearError,
     clearMessages,
   }
