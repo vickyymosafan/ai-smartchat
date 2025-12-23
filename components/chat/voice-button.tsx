@@ -37,6 +37,7 @@ export interface VoiceButtonProps {
  * - Shows pulsing animation when listening
  * - Disabled/hidden when browser doesn't support speech recognition
  * - Touch-friendly with 44px minimum touch target
+ * - Uses mounted state to prevent hydration mismatch
  */
 export function VoiceButton({
   isListening,
@@ -47,7 +48,34 @@ export function VoiceButton({
   onToggle,
   className,
 }: VoiceButtonProps) {
-  // Don't render if browser doesn't support
+  // Track mounted state to prevent hydration mismatch
+  // Server renders with isSupported=false, client may have isSupported=true
+  const [isMounted, setIsMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  // Before hydration, render a placeholder button to match server HTML
+  if (!isMounted) {
+    return (
+      <Button
+        type="button"
+        size="icon"
+        variant="ghost"
+        disabled
+        className={cn(
+          "h-7 w-7 sm:h-8 sm:w-8 rounded-full opacity-50",
+          className
+        )}
+      >
+        <Mic className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground" />
+        <span className="sr-only">Input suara</span>
+      </Button>
+    )
+  }
+
+  // After hydration, render based on actual support
   if (!isSupported) {
     return (
       <Tooltip>

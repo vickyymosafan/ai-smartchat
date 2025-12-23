@@ -4,16 +4,22 @@ import { useChat } from "@/components/providers/chat-provider"
 
 const suggestions = [
   {
-    title: "Apa saja jalur pendaftaran yang tersedia untuk calon mahasiswa baru Unmuh Jember?",
+    title: "Apa fokus keunggulan dari Program Studi Teknik Elektro Universitas Muhammadiyah Jember?",
   },
   {
-    title: "Kapan Universitas Muhammadiyah Jember didirikan dan siapa yang mendirikannya?",
+    title: "Berapa SKS bobot Tugas Akhir (Skripsi) di Teknik Informatika?",
   },
   {
-    title: "Apa saja jenis beasiswa yang tersedia di Unmuh Jember?",
+    title: "Apa peringkat akreditasi Program Studi Teknik Lingkungan saat ini?",
   },
   {
-    title: "Dengan siapa saja Program Studi Pendidikan Olahraga menjalin kerjasama di tingkat lokal?",
+    title: "Apa dua fokus utama bidang keahlian di Teknik Mesin Unmuh Jember?",
+  },
+  {
+    title: "Sebutkan 4 profil lulusan yang ditargetkan oleh Prodi Teknik Sipil!",
+  },
+  {
+    title: "Sebutkan dua Kelompok Keahlian Dosen dan Keilmuan (KKDK) di Sistem Informasi!",
   },
 ]
 
