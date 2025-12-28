@@ -35,8 +35,8 @@ Asisten AI berbasis chat untuk Universitas Muhammadiyah Jember yang dibangun den
 1. **Clone repository**
 
    ```bash
-   git clone <repository-url>
-   cd smartchat-ai
+   git clone https://github.com/vickyymosafan/ai-smartchat.git
+   cd ai-smartchat
    ```
 
 2. **Install dependencies**
