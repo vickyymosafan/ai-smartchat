@@ -75,6 +75,18 @@ export const SERVICE_WORKER = {
 } as const;
 
 /**
+ * Cache configuration
+ * Set to false for always-fresh data (no offline support)
+ *
+ * Rationale: AI chat requires real-time server communication,
+ * caching would cause stale responses and confusion.
+ */
+export const PWA_CACHE = {
+  enabled: false,
+  reason: "AI chat requires real-time server communication",
+} as const;
+
+/**
  * Type exports for type safety
  */
 export type ThemeMode = keyof typeof PWA_THEME_COLORS;
