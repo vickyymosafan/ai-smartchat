@@ -11,7 +11,9 @@ import * as React from "react";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
 import { useOnboarding, ONBOARDING_STEPS } from "@/hooks/useOnboarding";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
@@ -110,6 +112,11 @@ export function OnboardingDialog() {
           className="sm:max-w-md p-0 gap-0 overflow-hidden"
           showCloseButton
         >
+          {/* Visually hidden title for accessibility */}
+          <VisuallyHidden.Root asChild>
+            <DialogTitle>{currentStepData.title}</DialogTitle>
+          </VisuallyHidden.Root>
+
           {/* Header with gradient background */}
           <div
             className={cn(
