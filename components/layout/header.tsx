@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
+import { PWAInstallItem } from "@/components/pwa"
 
 interface HeaderProps {
   isSidebarCollapsed: boolean
@@ -50,7 +51,13 @@ export function Header({ isSidebarCollapsed, onToggleSidebar, onOpenAbout }: Hea
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
+            {/* PWA Install Section */}
+            <DropdownMenuLabel>Aplikasi</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <PWAInstallItem />
+
             {/* Display Mode Section */}
+            <DropdownMenuSeparator />
             <DropdownMenuLabel>Tampilan</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setTheme("light")}>

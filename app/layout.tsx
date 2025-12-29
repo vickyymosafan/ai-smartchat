@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 
 import { Analytics } from "@vercel/analytics/next";
 import { AppProviders } from "@/components/providers/app-providers";
+import { OnboardingDialog } from "@/components/onboarding";
 import { APP_METADATA, PWA_THEME_COLORS, SERVICE_WORKER, APP_LOGO } from "@/lib/pwa/config";
 import "./globals.css";
 
@@ -88,7 +89,10 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased overflow-hidden touch-manipulation">
-        <AppProviders>{children}</AppProviders>
+        <AppProviders>
+          {children}
+          <OnboardingDialog />
+        </AppProviders>
         <Analytics />
       </body>
     </html>

@@ -11,4 +11,6 @@ export { useEditableItem } from './useEditableItem'
 export { useConfirmDialog } from './useConfirmDialog'
 export { useMediaQuery, useIsMobile, useIsTablet, useIsDesktop, usePrefersReducedMotion, useHydrated } from './useMediaQuery'
 export { useSpeechRecognition } from './useSpeechRecognition'
+export { usePWAInstall } from './usePWAInstall'
+export { useOnboarding, ONBOARDING_STEPS } from './useOnboarding'
 
