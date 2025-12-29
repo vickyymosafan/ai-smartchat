@@ -119,6 +119,15 @@ export function usePWAInstall(): PWAInstallReturn {
 
   // Listen for beforeinstallprompt event
   React.useEffect(() => {
+    // Check if event was already captured globally (before React hydration)
+    // This is set in app/layout.tsx inline script
+    const capturedPrompt = (window as Window & { __pwaInstallPrompt?: BeforeInstallPromptEvent }).__pwaInstallPrompt;
+    if (capturedPrompt) {
+      deferredPrompt.current = capturedPrompt;
+      setIsInstallable(true);
+    }
+
+    // Still listen for future events (in case of re-fires or edge cases)
     const handler = (e: Event) => {
       e.preventDefault();
       deferredPrompt.current = e as BeforeInstallPromptEvent;
@@ -132,6 +141,8 @@ export function usePWAInstall(): PWAInstallReturn {
       setIsInstalled(true);
       setIsInstallable(false);
       deferredPrompt.current = null;
+      // Clear global reference
+      (window as Window & { __pwaInstallPrompt?: BeforeInstallPromptEvent }).__pwaInstallPrompt = undefined;
     };
 
     window.addEventListener("appinstalled", installHandler);

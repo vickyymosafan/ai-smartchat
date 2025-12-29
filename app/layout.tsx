@@ -75,12 +75,20 @@ export default function RootLayout({
       <head>
         {/* Preload critical above-the-fold images */}
         <link rel="preload" href={APP_LOGO.path} as="image" type={APP_LOGO.type} />
-        {/* Service Worker Registration */}
+        {/* Service Worker Registration & PWA Install Prompt Capture */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
+              // Capture beforeinstallprompt ASAP (before React hydrates)
+              // This event fires early in page load and may be missed by React hooks
+              window.addEventListener('beforeinstallprompt', function(e) {
+                e.preventDefault();
+                window.__pwaInstallPrompt = e;
+              });
+
+              // Register Service Worker
               if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
+                window.addEventListener('load', function() {
                   navigator.serviceWorker.register('${SERVICE_WORKER.path}', { scope: '${SERVICE_WORKER.scope}' });
                 });
               }
