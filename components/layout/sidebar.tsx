@@ -152,7 +152,7 @@ export function Sidebar({
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-2 sm:p-3 border-b border-sidebar-border">
+        <div id="sidebar-logo" className="flex items-center justify-between p-2 sm:p-3 border-b border-sidebar-border">
           <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
             <Image 
               src="/UMJ.webp" 
@@ -181,6 +181,7 @@ export function Sidebar({
         {/* New Chat Button */}
         <div className="p-2 sm:p-3">
           <Button
+            id="new-chat-btn"
             onClick={createNewChat}
             variant="outline"
             className="w-full justify-start gap-1.5 sm:gap-2 border-dashed bg-transparent text-xs sm:text-sm h-8 sm:h-9 touch-manipulation"

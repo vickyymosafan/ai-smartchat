@@ -143,6 +143,7 @@ export function ChatInput() {
         <div className="relative flex items-end gap-2 touch-manipulation">
           <div className="flex-1 relative">
             <Textarea
+              id="chat-input"
               ref={textareaRef}
               value={input}
               onChange={handleInputChange}

@@ -2,4 +2,6 @@
  * Onboarding Components Barrel Export
  */
 
-export { OnboardingDialog } from "./onboarding-dialog";
+
+export { OnboardingTour } from "./onboarding-tour";
+

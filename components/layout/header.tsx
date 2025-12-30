@@ -45,7 +45,7 @@ export function Header({ isSidebarCollapsed, onToggleSidebar, onOpenAbout }: Hea
         {/* Settings Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
+            <Button id="settings-trigger" variant="ghost" size="icon">
               <Settings className="h-5 w-5" />
               <span className="sr-only">Pengaturan</span>
             </Button>
