@@ -11,7 +11,7 @@ Smartchat AI adalah asisten AI berbasis chat yang dibangun untuk Universitas Muh
 - Dukungan tema gelap/terang dengan skema warna kustom
 - Input suara dengan speech recognition
 - PWA dengan install prompt cross-platform
-- Onboarding wizard untuk pengguna baru
+- Onboarding tour interaktif dengan driver.js untuk pengguna baru
 - Desain responsif untuk mobile dan desktop
 
 ## Fitur PWA

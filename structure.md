@@ -21,7 +21,7 @@ components/
 ├── dialogs/            # Modal dialog
 ├── layout/             # Sidebar, header
 ├── music/              # Pemutar musik
-├── onboarding/         # Wizard onboarding pengguna baru
+├── onboarding/         # Tour interaktif driver.js
 ├── providers/          # React context providers
 ├── pwa/                # Komponen PWA install
 └── ui/                 # Komponen shadcn/ui

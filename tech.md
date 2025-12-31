@@ -23,7 +23,7 @@
 - **Web App Manifest** dengan standalone display mode
 - **beforeinstallprompt** capture untuk install prompt
 - **Cross-platform**: Chrome/Edge (native), Safari iOS (manual instructions)
-- **Onboarding Wizard** untuk pengguna pertama kali
+- **Onboarding Tour** dengan driver.js untuk pengguna pertama kali
 
 ## Library Utama
 
@@ -35,6 +35,7 @@
 - `sonner` untuk notifikasi toast
 - `swagger-ui-react` untuk dokumentasi API
 - `@radix-ui/react-visually-hidden` untuk accessibility
+- `driver.js` untuk onboarding tour interaktif
 
 ## Generasi API
 
